@@ -1,0 +1,17 @@
+projects:
+  FetchByInterval:
+    schemaPath: app/graphql/schema.json
+    includes:
+      - components/graphql/*/**.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: components/graphql/API.ts
+        docsFilePath: components/graphql
+        region: ap-northeast-1
+        apiId: xp77dam3sngbdf7mfb7aefjmbi
+extensions:
+  amplify:
+    version: 3

@@ -1,0 +1,73 @@
+﻿schema {
+  query: Query
+}
+
+type AM319Data {
+  NextToken: String
+  brand: String!
+  co2: [Int]
+  deveui: String!
+  hcho: [Float]
+  humidity: [Float]
+  light_level: [Int]
+  model: String!
+  pir: [Float]
+  pm10: [Int]
+  pm2_5: [Int]
+  pressure: [Float]
+  temperature: [Float]
+  time: [AWSTimestamp]!
+  timestamp: [String]!
+  tvoc: [Int]
+}
+
+type AM319Message {
+  error: String
+  result: [AM319Data]
+  statusCode: Int!
+}
+
+type DownsampledAM319Data {
+  NextToken: String
+  brand: String!
+  co2: [Float]
+  deveui: String!
+  hcho: [Float]
+  humidity: [Float]
+  light_level: [Float]
+  model: String!
+  pir: [Float]
+  pm10: [Float]
+  pm2_5: [Float]
+  pressure: [Float]
+  temperature: [Float]
+  time: [AWSTimestamp]!
+  timestamp: [String]!
+  tvoc: [Float]
+}
+
+type DownsampledAM319Message {
+  error: String
+  result: [DownsampledAM319Data]
+  statusCode: Int!
+}
+
+type Query {
+  getAM319Data(args: GetDataArgs): AM319Message
+  getDownsampledAM319Data(args: GetDataArgs): DownsampledAM319Message
+  test(args: GetDataArgs): String
+}
+
+input GetDataArgs {
+  ClientToken: String
+  NextToken: String
+  deveui: String
+  frequency: String
+  range: TimeRangeArgs!
+}
+
+input TimeRangeArgs {
+  endTime: AWSDateTime
+  interval: String
+  startTime: AWSDateTime
+}

@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "iotclientae75b24b": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_iotclientae75b24b_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientae75b24b"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientae75b24b_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientae75b24b"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientae75b24b_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientae75b24b"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientae75b24b_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientae75b24b"
+        }
+      ]
+    }
+  }
+}
