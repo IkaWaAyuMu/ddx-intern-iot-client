@@ -2,21 +2,17 @@ import { useState, useEffect } from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
-import { useFonts } from 'expo-font';
 import { Auth, Hub } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as ReactStatusBar } from 'react-native'
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'expo-router';
 
 
 
 export default function Header() {
-  const [fontsLoaded] = useFonts({
-    'UberMove-Medium': require('../assets/fonts/UberMoveMedium.otf'),
-  });
-
   const [user, setUser] = useState<any>(null);
   const [customState, setCustomState] = useState<string | null>(null);
 
@@ -51,19 +47,7 @@ export default function Header() {
 
     return unsubscribe;
   }, []);
-
-  if (!fontsLoaded) return (
-    <>
-      <StatusBar style='light' />
-      <View style={styles.header}>
-        <Pressable onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}>
-          <FontAwesomeIcon icon={faBars} size={30} color='#fff' />
-        </Pressable>
-      </View>
-      <Animated.View style={[ styles.body, menuBodyAnimatedStyle ]}/>
-    </>
-  );
-
+  
   return (
     <>
       <StatusBar style='light' />
@@ -76,7 +60,8 @@ export default function Header() {
       <Animated.View style={[ styles.body, menuBodyAnimatedStyle ]}>
         <View />
         <View style={styles.main}>
-          <Pressable><Text style={styles.text}>Nothing here (yet)</Text></Pressable>
+          <Link href='/home' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Home</Text></Link>
+          <Link href='/test' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Test</Text></Link>
         </View>
         <View style={styles.bottom}>
           <Text style={styles.bottomText}>You are logging in as {user ? user.attributes.name : "ANONYMOUS"}.</Text>

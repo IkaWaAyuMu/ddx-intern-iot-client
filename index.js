@@ -34,5 +34,6 @@ EStyleSheet.build({
   $infinity: '999rem',
   $backgroundColor: '#fff',
   $textColor: '#000',
-  $darkTextColor: '#fff'
+  $darkTextColor: '#fff',
+  $gray: "#e8e8e8"
 });
