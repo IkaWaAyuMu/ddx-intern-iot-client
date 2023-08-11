@@ -87,13 +87,13 @@ export function CardGroup(props: {
 
   return (
     <View style={styles.cardGroup}>
-      {props.color && <View style={{ ...styles.background, backgroundColor: props.color }} />}
+      <View style={{ ...styles.background, backgroundColor: props.color ?? "#999999"}}/>
       <View style={styles.spacer1rem} />
       <View style={styles.cardGroupFrame}>
         <View style={{ flex: 1 }}>
-          <Text style={{ ...styles.cardText, ...styles.cardTitle }}>{props.title}</Text>
+          <Text style={{ ...styles.cardGroupText, ...styles.cardTitle }}>{props.title}</Text>
           <View style={styles.spacerp75rem} />
-          <Text style={{ ...styles.cardText, ...styles.cardGroupDescriptionText }}>{props.description}</Text>
+          <Text style={{ ...styles.cardGroupText, ...styles.cardGroupDescriptionText }}>{props.description}</Text>
           <View style={styles.spacerp75rem} />
         </View>
         <View style={styles.cardGroupIcon}>{props.icon}</View>
@@ -126,6 +126,9 @@ const styles = EStyleSheet.create({
   cardGroupFrame: {
     flexDirection: 'row',
     paddingLeft: '1rem',
+  },
+  cardGroupText: {
+    color: '$darkTextColor'
   },
   cardGroupDescriptionText: {
     fontSize: '1rem',
@@ -187,8 +190,8 @@ const styles = EStyleSheet.create({
   },
   background: {
     position: "absolute",
-    width: "999%",
-    height: "999%",
+    width: "$infinity",
+    height: "$infinity",
   },
   cardFrame: {
     flexDirection: 'row',

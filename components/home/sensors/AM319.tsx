@@ -30,7 +30,7 @@ export default function AM319(props: { deveui: string, data: any }) {
     <>
       {(orientation === Orientation.PORTRAIT_UP || orientation === Orientation.PORTRAIT_DOWN) && <View style={styles.briefInfo}>
         <CardGroup title="Thermal"
-          description={`${thermalFavor.desc} ${thermalFavor.pmv} (Feels like ${calculateHeatIndex(data.temperature[lastIndex] ?? 0, data.humidity[lastIndex] ?? 0).toFixed(1)}°C)`}
+          description={`${thermalFavor.desc} (Feels like ${calculateHeatIndex(data.temperature[lastIndex] ?? 0, data.humidity[lastIndex] ?? 0).toFixed(1)}°C)`}
           icon={<></>}
           color={thermalFavor.color}
           grouplink={`/AM319/${deveui}/temp`}
@@ -45,6 +45,7 @@ export default function AM319(props: { deveui: string, data: any }) {
           description={iaqFavor.desc}
           icon={<></>}
           color={iaqFavor.color}
+          grouplink={`/AM319/${deveui}/iaq`}
           data={[
             { title: "PM2.5", value: data.pm2_5[lastIndex] ?? "-", unit: "μg/m³", color: ValueIncrementToAQIColor(data.pm2_5[lastIndex] ?? 0, [10, 12, 15, 35.5, 55.5]) },
             { title: "PM10", value: data.pm10[lastIndex] ?? "-", unit: "μg/m³", color: ValueIncrementToAQIColor(data.pm10[lastIndex] ?? 0, [20, 30, 50, 155, 255]) },

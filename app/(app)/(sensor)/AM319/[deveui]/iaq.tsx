@@ -5,8 +5,7 @@ import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { DetailCardGroup } from '../../../../../components/home/components/detailCard';
-import { PMVtoFavor, ValueBetweenToTempColor } from '../../../../../components/toFavor';
-import CalculatePMV from '../../../../../components/calculatePMV';
+import { ValueIncrementToAQIColor } from '../../../../../components/toFavor';
 
 export default function AM319Temperature() {
   const localSearchParams = useLocalSearchParams();
@@ -32,8 +31,11 @@ export default function AM319Temperature() {
         model
         time
         timestamp
-        humidity
-        temperature
+        pm2_5
+        co2
+        tvoc
+        pm10
+        hcho
         __typename
       }
       error
@@ -104,79 +106,125 @@ export default function AM319Temperature() {
         {!isFirstDataLoading && !isFirstCurrentDataLoading &&
           (!data.result[0] ? <View /> : !currentData.result[0] ? <View /> :
             <>
-              <DetailCardGroup
-                title="Predicted Mean Vote"
+                <DetailCardGroup
+                title="Particulate Matter 2.5"
                 data={(() => {
                   const r = []
 
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
-                      value: Math.round(CalculatePMV(
-                        data.result[0].temperature[i],
-                        data.result[0].temperature[i],
-                        0,
-                        data.result[0].humidity[i],
-                        1.2,
-                        0.57).pmv
-                      * 1e2) / 1e2,
+                      value: Math.round(data.result[0].pm2_5[i] * 1e1 ) / 1e1,
                       timestamp: data.result[0].timestamp[i]
                     })
                   }
                   
                   return r;
                 })()}
-                value={ Math.round(CalculatePMV(
-                  data.result[0].temperature[0],
-                  data.result[0].temperature[0],
-                  0,
-                  data.result[0].humidity[0],
-                  1.2,
-                  0.57).pmv
-                * 1e2) / 1e2}
-                unit=""
-                chartUnit=""
-                color={PMVtoFavor(currentData.result[0].temperature[0], currentData.result[0].humidity[0]).color}
-                decimalPlaces={2}
-              />
-              <DetailCardGroup
-                title="Temperature"
-                data={(() => {
-                  const r = []
-
-                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
-                    r.push({
-                      value: Math.round(data.result[0].temperature[i] * 1e1) / 1e1,
-                      timestamp: data.result[0].timestamp[i]
-                    })
-                  }
-                  
-                  return r;
-                })()}
-                value={currentData.result[0].temperature[currentData.result[0].temperature.length - 1]}
-                unit="degree Celsius"
-                chartUnit="°C"
-                color={ValueBetweenToTempColor(currentData.result[0].temperature[currentData.result[0].temperature.length - 1], [21, 20, 19, 18, 17], [27, 28, 29, 30, 31])}
-                decimalPlaces={1}
+                value={currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1]}
+                unit="microgram per cubic meter"
+                chartUnit="μg/m³"
+                color={ValueIncrementToAQIColor(currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1], [10, 12, 15, 35.5, 55.5])}
+                decimalPlaces={0}
                 />
                 <DetailCardGroup
-                title="Relative Humidity"
+                title="Carbondioxide"
                 data={(() => {
                   const r = []
 
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
-                      value: Math.round(data.result[0].humidity[i] * 1e1) / 1e1,
+                      value: Math.round(data.result[0].pm10[i] * 1e1 ) / 1e1,
                       timestamp: data.result[0].timestamp[i]
                     })
                   }
                   
                   return r;
                 })()}
-                value={currentData.result[0].humidity[currentData.result[0].humidity.length - 1]}
-                unit="percent"
-                chartUnit="%"
-                color={ValueBetweenToTempColor(currentData.result[0].humidity[currentData.result[0].humidity.length - 1], [40, 35, 30, 25, 20], [60, 65, 70, 75, 80])}
-                decimalPlaces={1}
+                value={currentData.result[0].pm10[currentData.result[0].pm10.length - 1]}
+                unit="microgram per cubic meter"
+                chartUnit="μg/m³"
+                color={ValueIncrementToAQIColor(currentData.result[0].pm10[currentData.result[0].pm10.length - 1], [10, 12, 15, 35.5, 55.5])}
+                decimalPlaces={0}
+                />
+                <DetailCardGroup
+                title="Carbon dioxide"
+                data={(() => {
+                  const r = []
+
+                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
+                    r.push({
+                      value: Math.round(data.result[0].co2[i] * 1e1 ) / 1e1,
+                      timestamp: data.result[0].timestamp[i]
+                    })
+                  }
+                  
+                  return r;
+                })()}
+                value={currentData.result[0].co2[currentData.result[0].pm10.length - 1]}
+                unit="part per million"
+                chartUnit="ppm"
+                color={ValueIncrementToAQIColor(currentData.result[0].co2[currentData.result[0].co2.length - 1], [200, 500, 1000, 2000, 3000])}
+                decimalPlaces={0}
+                />
+                <DetailCardGroup
+                title="Formaldehyde"
+                data={(() => {
+                  const r = []
+
+                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
+                    r.push({
+                      value: Math.round(data.result[0].hcho[i] * 1e2 ) / 1e2,
+                      timestamp: data.result[0].timestamp[i]
+                    })
+                  }
+                  
+                  return r;
+                })()}
+                value={currentData.result[0].hcho[currentData.result[0].pm10.length - 1]}
+                unit="milligram per cubic meter"
+                chartUnit="mg/m³"
+                color={ValueIncrementToAQIColor(currentData.result[0].hcho[currentData.result[0].hcho.length - 1], [0.05, 0.1, 0.25, 0.3, 0.5])}
+                decimalPlaces={2}
+                />
+                <DetailCardGroup
+                title="Carbon dioxide"
+                data={(() => {
+                  const r = []
+
+                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
+                    r.push({
+                      value: Math.round(data.result[0].co2[i] * 1e1 ) / 1e1,
+                      timestamp: data.result[0].timestamp[i]
+                    })
+                  }
+                  
+                  return r;
+                })()}
+                value={currentData.result[0].co2[currentData.result[0].pm10.length - 1]}
+                unit="part per million"
+                chartUnit="ppm"
+                color={ValueIncrementToAQIColor(currentData.result[0].co2[currentData.result[0].co2.length - 1], [200, 500, 1000, 2000, 3000])}
+                decimalPlaces={0}
+                />
+                <DetailCardGroup
+                title="Total Volatile Organic Compound"
+                data={(() => {
+                  const r = []
+
+                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
+                    r.push({
+                      value: Math.round(data.result[0].hcho[i] * 1e2 ) / 1e2,
+                      timestamp: data.result[0].timestamp[i]
+                    })
+                  }
+                  
+                  return r;
+                })()}
+                value={currentData.result[0].hcho[currentData.result[0].pm10.length - 1]}
+                unit=""
+                chartUnit=""
+                color={ValueIncrementToAQIColor(parseFloat(currentData.result[0].hcho[currentData.result[0].hcho.length - 1]) / 100, [1,2,3,4,5])}
+                decimalPlaces={2}
                 />
             </>
           )

@@ -12,6 +12,18 @@ export const ValueBetweenToAQIColor = (value: number, min: number[], max: number
     "#7e002333"
   )
 }
+export const ValueBetweenToTempColor = (value: number, min: number[], max: number[]) => {
+  while (min.length < 5) min.push(min[min.length - 1]);
+  while (max.length < 5) max.push(max[max.length - 1]);
+  return (
+    value < min[4] ? "#000ed433" : value > max[4] ? "#d4270033" :
+    value < min[3] ? "#0012d433" : value > max[3] ? "#d44e0033" :
+    value < min[2] ? "#003cd433" : value > max[2] ? "#d49b0033" :
+    value < min[1] ? "#0086d433" : value > max[1] ? "#d4cd0033" :
+    value < min[0] ? "#00c6d433" : value > max[0] ? "#91d40033" :
+    undefined
+  )
+}
 export const ValueIncrementToAQIColor = (value: number, max: number[]) => {
   while(max.length < 5) max.push(max[max.length - 1]);
   return (

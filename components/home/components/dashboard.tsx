@@ -44,10 +44,12 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
   },
   timeText: {
+    color: '$darkTextColor',
     fontFamily: 'UberMoveText-Medium',
     fontSize: '3rem',
   },
   dateText: {
+    color: '$darkTextColor',
     fontFamily: 'UberMoveText-Medium',
     fontSize: '0.75rem',
   },
@@ -63,7 +65,8 @@ const styles = EStyleSheet.create({
     height: '7.81rem',
     width: '12rem',
     borderWidth: '0.125rem',
-    borderColor: '#808080',
+    borderRadius: '1rem',
+    borderColor: '#fff',
     overflow: 'hidden',
   },
   dashboardCardSmall: {
@@ -71,7 +74,8 @@ const styles = EStyleSheet.create({
     height: '7.81rem',
     width: '5.75rem',
     borderWidth: '0.125rem',
-    borderColor: '#808080',
+    borderRadius: '1rem',
+    borderColor: '#fff',
     overflow: 'hidden',
   },
   dashboardCardHeader: {

@@ -32,7 +32,8 @@ Amplify.configure({
 
 EStyleSheet.build({
   $infinity: '999rem',
-  $backgroundColor: '#fff',
+  $backgroundColor: '#595959',
+  $lighterBackgroundColor: '#999999',
   $textColor: '#000',
   $darkTextColor: '#fff',
   $gray: "#e8e8e8"
