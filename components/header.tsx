@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { View, Text, Pressable } from 'react-native';
-import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, withTiming, useAnimatedStyle, Easing, withRepeat, cancelAnimation } from 'react-native-reanimated';
 import { Auth, Hub } from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { StatusBar as ReactStatusBar } from 'react-native'
@@ -47,6 +47,20 @@ export default function Header() {
 
     return unsubscribe;
   }, []);
+
+  const rotation = useSharedValue(0);
+  const spin = useAnimatedStyle(() => {
+    return {transform: [{rotateZ: `${rotation.value}deg`}]};
+  }, [rotation.value]);
+  useEffect(() => {
+    rotation.value = withRepeat(
+      withTiming(360, {
+        duration: 1000,
+        easing: Easing.linear,
+      }), -1
+    );
+    return () => cancelAnimation(rotation);
+  }, []);
   
   return (
     <>
@@ -61,13 +75,14 @@ export default function Header() {
         <View />
         <View style={styles.main}>
           <Link href='/home' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Home</Text></Link>
-          <Link href='/test' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Test</Text></Link>
+          <Link href='/AM319/24e124710c409355/iaq' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Test</Text></Link>
         </View>
         <View style={styles.bottom}>
           <Text style={styles.bottomText}>You are logging in as {user ? user.attributes.name : "ANONYMOUS"}.</Text>
           <Pressable onPress={() => Auth.signOut()} style={styles.logoutButton}><Text style={styles.bottomText}>Log out</Text></Pressable>
         </View>
       </Animated.View>
+      <Animated.Image source={require("../assets/ddx.png")} style={[{position: 'absolute', top: '6%', left: '2%', height: 50, width: 50}, spin]}/>
     </>);
 }
 
