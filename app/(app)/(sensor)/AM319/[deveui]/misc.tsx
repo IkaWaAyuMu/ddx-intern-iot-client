@@ -1,17 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Redirect, useLocalSearchParams } from 'expo-router';
-import { ScrollView, RefreshControl, Text } from 'react-native';
+import { Text, ScrollView, RefreshControl } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { DetailCardGroup, LastUpdated } from '../../../../../components/home/components/detailCard';
-import { PMVtoFavor, ValueBetweenToAQIColor, ValueBetweenToTempColor } from '../../../../../components/toFavor';
-import CalculatePMV from '../../../../../components/calculatePMV';
 
-export default function AM319Temperature() {
+export default function AM319Misc() {
   const localSearchParams = useLocalSearchParams();
   const { deveui } = localSearchParams;
-  const searchLink = `/AM319/${deveui}/details?searchParams=`
 
   const [isUserLoading, setIsUserLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -34,15 +31,14 @@ export default function AM319Temperature() {
         model
         time
         timestamp
-        humidity
-        temperature
+        light_level
         __typename
       }
       error
       __typename
     }
-  }`
-
+  }
+`
   // Check for existing authentication
   useEffect(() => {
     Auth.currentAuthenticatedUser()
@@ -100,26 +96,6 @@ export default function AM319Temperature() {
     fetchCurrentData();
   }, [setData, setIsDataLoading, setIsFirstDataLoading, setCurrentData, setIsCurrentDataLoading, setIsFirstCurrentDataLoading])
 
-  const PMVData = (() => {
-    const r = []
-    if (data.result != undefined) for (let i = 0; i < data.result[0].timestamp.length; i++) {
-      r.push({
-        value: Math.round(CalculatePMV(
-          data.result[0].temperature[i],
-          data.result[0].temperature[i],
-          0,
-          data.result[0].humidity[i],
-          1.2,
-          0.57).pmv
-          * 1e2) / 1e2,
-        timestamp: data.result[0].timestamp[i],
-        frontColor: PMVtoFavor(data.result[0].temperature[i], data.result[0].humidity[i]).color?.substring(0, 7)
-      })
-    }
-
-    return r;
-  })();
-
   return (
     <>
       {!isUserLoading && !user && <Redirect href='/' />}
@@ -131,74 +107,27 @@ export default function AM319Temperature() {
           (error ? <Text>{error}</Text> :
             <>
               <DetailCardGroup
-                title="Predicted Mean Vote"
-                data={PMVData}
-                value={Math.round(CalculatePMV(
-                  data.result[0].temperature[0],
-                  data.result[0].temperature[0],
-                  0,
-                  data.result[0].humidity[0],
-                  1.2,
-                  0.57).pmv
-                  * 1e2) / 1e2}
-                color={PMVtoFavor(currentData.result[0].temperature[0], currentData.result[0].humidity[0]).color}
+                title="Light Level"
+                data={(() => {
+                  const r = []
+
+                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
+                    r.push({
+                      value: Math.round(data.result[0].light_level[i] * 1e1) / 1e1,
+                      timestamp: data.result[0].timestamp[i]
+                    })
+                  }
+
+                  return r;
+                })()}
+                value={currentData.result[0].light_level[currentData.result[0].light_level.length - 1]}
                 unit=""
-                detailSearchLink={`${searchLink}pmv`}
-                sectionCount={Math.ceil(Math.max(Math.abs(Math.min(PMVData.reduce((prev, curr) => prev.value < curr.value ? prev : curr).value, -2)), Math.max(PMVData.reduce((prev, curr) => prev.value > curr.value ? prev : curr).value, 2)))}
-                chartMin={Math.min(PMVData.reduce((prev, curr) => prev.value < curr.value ? prev : curr).value, -2)}
-                chartMax={Math.max(PMVData.reduce((prev, curr) => prev.value > curr.value ? prev : curr).value, 2)}
-              />
-              <DetailCardGroup
-                title="Temperature"
-                data={(() => {
-                  const r = []
-
-                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
-                    r.push({
-                      value: Math.round(data.result[0].temperature[i] * 1e1) / 1e1,
-                      timestamp: data.result[0].timestamp[i],
-                      frontColor: ValueBetweenToTempColor(data.result[0].temperature[i], [21, 20, 19, 18, 17], [27, 28, 29, 30, 31])?.substring(0, 7)
-                    })
-                  }
-
-                  return r;
-                })()}
-                value={currentData.result[0].temperature[currentData.result[0].temperature.length - 1]}
-                unit="degrees Celsius"
-                detailSearchLink={`${searchLink}temperature`}
-                color={ValueBetweenToTempColor(currentData.result[0].temperature[currentData.result[0].temperature.length - 1], [21, 20, 19, 18, 17], [27, 28, 29, 30, 31])}
-                chartMax={30}
-                yOffset={10}
-                sectionCount={10}
-              />
-              <DetailCardGroup
-                title="Relative Humidity"
-                data={(() => {
-                  const r = []
-
-                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
-                    r.push({
-                      value: Math.round(data.result[0].humidity[i] * 1e1) / 1e1,
-                      timestamp: data.result[0].timestamp[i],
-                      frontColor: ValueBetweenToAQIColor(data.result[0].humidity[i], [40, 35, 30, 25, 20], [60, 65, 70, 75, 80])?.substring(0, 7)
-                    })
-                  }
-
-                  return r;
-                })()}
-                value={currentData.result[0].humidity[currentData.result[0].humidity.length - 1]}
-                unit="percent"
-                detailSearchLink={`${searchLink}humidity`}
-                color={ValueBetweenToTempColor(currentData.result[0].humidity[currentData.result[0].humidity.length - 1], [40, 35, 30, 25, 20], [60, 65, 70, 75, 80])}
-                chartMax={100}
-                sectionCount={10}
-                yAxisSuffix="%"
+                detailSearchLink={`/AM319/${deveui}/details?searchParams=light_level`}
+                chartMax={5}
+                sectionCount={5}
               />
               <LastUpdated time={new Date(currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentData.result[0].brand} model={currentData.result[0].model} />
-
-            </>
-          )
-        }
+            </>)}
       </ScrollView>
     </>);
 }
@@ -207,7 +136,6 @@ const styles = EStyleSheet.create({
   container: {
     paddingVertical: '2rem',
     paddingHorizontal: '0.63rem',
-    backgroundColor: '$backgroundColor',
     gap: '1.25rem',
   }
 });

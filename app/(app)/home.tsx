@@ -2,10 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { Redirect } from 'expo-router';
 import { View, ScrollView, RefreshControl, Text } from 'react-native';
 import { Auth } from 'aws-amplify';
-import { API } from '@aws-amplify/api'
-import { getDownsampledAM319Data } from '../../components/graphql/queries';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import AM319 from '../../components/home/sensors/AM319';
+import { QueryAllShort } from '../../components/graphql/customQueries';
 
 export default function Home() {
 
@@ -16,6 +15,7 @@ export default function Home() {
 
   const [data, setData] = useState<any>({error: "No data"});
 
+  const sensor = 'AM319';
   const deveui = '24e124710c409355';
 
   // Check for existing authentication
@@ -29,25 +29,21 @@ export default function Home() {
   // Fetch the latest data
   const fetchData = async () => {
     setIsDataLoading(true);
-    const temp = (await API.graphql({
-      query: getDownsampledAM319Data,
-      variables: {
-        args: {
-          deveui,
-          frequency: "1m",
-          range: { interval: "2m" }
-        }
-      }
-    }) as any).data.getDownsampledAM319Data;
+    const temp = await QueryAllShort(sensor, {
+      deveui,
+      frequency: "1m",
+      range: { interval: "2m" }
+    })
     setData(temp.result[0] && temp.result[0].time.length > 0 ? temp : data);
     setIsDataLoading(false);
     setIsFirstDataLoading(false);
   };
 
   useEffect(() => {
-    const fetchInterval = setInterval(() => { fetchData() }, 60000);
+    fetchData();
 
-    () => clearInterval(fetchInterval);
+    const fetchInterval = setInterval(() => { fetchData() }, 60000);
+    return () => clearInterval(fetchInterval);
   }, [setData, setIsDataLoading, setIsFirstDataLoading]);
 
   const onRefresh = useCallback(() => {
@@ -73,7 +69,5 @@ export default function Home() {
 const styles = EStyleSheet.create({
   container: {
     paddingVertical: '2rem',
-    paddingHorizontal: '0.63rem',
-    backgroundColor: '$backgroundColor',
-  }
+    paddingHorizontal: '0.63rem',  }
 });

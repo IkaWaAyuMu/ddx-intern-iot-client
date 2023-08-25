@@ -1,17 +1,18 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Redirect, useLocalSearchParams } from 'expo-router';
-import { View, ScrollView, RefreshControl } from 'react-native';
+import { Text, ScrollView, RefreshControl } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { DetailCardGroup } from '../../../../../components/home/components/detailCard';
+import { DetailCardGroup, LastUpdated } from '../../../../../components/home/components/detailCard';
 import { ValueIncrementToAQIColor } from '../../../../../components/toFavor';
 
-export default function AM319Temperature() {
+export default function AM319IAQ() {
   const localSearchParams = useLocalSearchParams();
   const { deveui } = localSearchParams;
 
   const [isUserLoading, setIsUserLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string|undefined>(undefined);
   const [isFirstDataLoading, setIsFirstDataLoading] = useState<boolean>(true);
   const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
   const [isFirstCurrentDataLoading, setIsFirstCurrentDataLoading] = useState<boolean>(true);
@@ -60,10 +61,11 @@ export default function AM319Temperature() {
         args: {
           deveui,
           frequency: "1d",
-          range: { interval: "8d" }
+          range: { interval: "30d" }
         }
       }
     }) as any).data.getDownsampledAM319Data;
+    setError(temp.error);
     setData(temp.result[0] && temp.result[0].time.length > 0 ? temp : data);
     setIsDataLoading(false);
     setIsFirstDataLoading(false);
@@ -87,8 +89,10 @@ export default function AM319Temperature() {
 
   useEffect(() => {
     fetchData();
+    fetchCurrentData();
+    const fetchInterval =  setInterval(() => { fetchCurrentData() }, 60000);
 
-    setInterval(() => { fetchCurrentData() }, 60000);
+    return clearInterval(fetchInterval);
   }, [setData, setIsDataLoading, setIsFirstDataLoading, setCurrentData, setIsCurrentDataLoading, setIsFirstCurrentDataLoading]);
 
   const onRefresh = useCallback(() => {
@@ -104,7 +108,7 @@ export default function AM319Temperature() {
         refreshControl={<RefreshControl refreshing={isDataLoading || isCurrentDataLoading} onRefresh={onRefresh} />}
       >
         {!isFirstDataLoading && !isFirstCurrentDataLoading &&
-          (!data.result[0] ? <View /> : !currentData.result[0] ? <View /> :
+          (error ? <Text>{error}</Text> :
             <>
                 <DetailCardGroup
                 title="Particulate Matter 2.5"
@@ -114,7 +118,8 @@ export default function AM319Temperature() {
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
                       value: Math.round(data.result[0].pm2_5[i] * 1e1 ) / 1e1,
-                      timestamp: data.result[0].timestamp[i]
+                      timestamp: data.result[0].timestamp[i],
+                      frontColor: ValueIncrementToAQIColor(data.result[0].pm2_5[i], [10, 12, 15, 35.5, 55.5])?.substring(0, 7)
                     })
                   }
                   
@@ -122,19 +127,19 @@ export default function AM319Temperature() {
                 })()}
                 value={currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1]}
                 unit="microgram per cubic meter"
-                chartUnit="μg/m³"
+                detailSearchLink={`/AM319/${deveui}/details?searchParams=pm2_5`}
                 color={ValueIncrementToAQIColor(currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1], [10, 12, 15, 35.5, 55.5])}
-                decimalPlaces={0}
                 />
                 <DetailCardGroup
-                title="Carbondioxide"
+                title="Particulate Matter 10"
                 data={(() => {
                   const r = []
 
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
                       value: Math.round(data.result[0].pm10[i] * 1e1 ) / 1e1,
-                      timestamp: data.result[0].timestamp[i]
+                      timestamp: data.result[0].timestamp[i],
+                      frontColor: ValueIncrementToAQIColor(data.result[0].pm10[i], [20, 30, 50, 155, 255])?.substring(0, 7)
                     })
                   }
                   
@@ -142,9 +147,8 @@ export default function AM319Temperature() {
                 })()}
                 value={currentData.result[0].pm10[currentData.result[0].pm10.length - 1]}
                 unit="microgram per cubic meter"
-                chartUnit="μg/m³"
-                color={ValueIncrementToAQIColor(currentData.result[0].pm10[currentData.result[0].pm10.length - 1], [10, 12, 15, 35.5, 55.5])}
-                decimalPlaces={0}
+                detailSearchLink={`/AM319/${deveui}/details?searchParams=pm10`}
+                color={ValueIncrementToAQIColor(currentData.result[0].pm10[currentData.result[0].pm10.length - 1], [20, 30, 50, 155, 255])}
                 />
                 <DetailCardGroup
                 title="Carbon dioxide"
@@ -154,17 +158,17 @@ export default function AM319Temperature() {
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
                       value: Math.round(data.result[0].co2[i] * 1e1 ) / 1e1,
-                      timestamp: data.result[0].timestamp[i]
+                      timestamp: data.result[0].timestamp[i],
+                      frontColor: ValueIncrementToAQIColor(data.result[0].co2[i], [200, 500, 1000, 2000, 3000])?.substring(0, 7)
                     })
                   }
                   
                   return r;
                 })()}
-                value={currentData.result[0].co2[currentData.result[0].pm10.length - 1]}
+                value={currentData.result[0].co2[currentData.result[0].hcho.length - 1]}
                 unit="part per million"
-                chartUnit="ppm"
+                detailSearchLink={`/AM319/${deveui}/details?searchParams=co2`}
                 color={ValueIncrementToAQIColor(currentData.result[0].co2[currentData.result[0].co2.length - 1], [200, 500, 1000, 2000, 3000])}
-                decimalPlaces={0}
                 />
                 <DetailCardGroup
                 title="Formaldehyde"
@@ -174,37 +178,18 @@ export default function AM319Temperature() {
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
                       value: Math.round(data.result[0].hcho[i] * 1e2 ) / 1e2,
-                      timestamp: data.result[0].timestamp[i]
+                      timestamp: data.result[0].timestamp[i],
+                      frontColor: ValueIncrementToAQIColor(data.result[0].hcho[i], [0.05, 0.1, 0.25, 0.3, 0.5])?.substring(0, 7)
                     })
                   }
                   
                   return r;
                 })()}
-                value={currentData.result[0].hcho[currentData.result[0].pm10.length - 1]}
+                value={currentData.result[0].hcho[currentData.result[0].hcho.length - 1]}
                 unit="milligram per cubic meter"
-                chartUnit="mg/m³"
+                detailSearchLink={`/AM319/${deveui}/details?searchParams=hcho`}
                 color={ValueIncrementToAQIColor(currentData.result[0].hcho[currentData.result[0].hcho.length - 1], [0.05, 0.1, 0.25, 0.3, 0.5])}
-                decimalPlaces={2}
-                />
-                <DetailCardGroup
-                title="Carbon dioxide"
-                data={(() => {
-                  const r = []
-
-                  for (let i = 0; i < data.result[0].timestamp.length; i++) {
-                    r.push({
-                      value: Math.round(data.result[0].co2[i] * 1e1 ) / 1e1,
-                      timestamp: data.result[0].timestamp[i]
-                    })
-                  }
-                  
-                  return r;
-                })()}
-                value={currentData.result[0].co2[currentData.result[0].pm10.length - 1]}
-                unit="part per million"
-                chartUnit="ppm"
-                color={ValueIncrementToAQIColor(currentData.result[0].co2[currentData.result[0].co2.length - 1], [200, 500, 1000, 2000, 3000])}
-                decimalPlaces={0}
+                chartMax={0.5}
                 />
                 <DetailCardGroup
                 title="Total Volatile Organic Compound"
@@ -213,19 +198,22 @@ export default function AM319Temperature() {
 
                   for (let i = 0; i < data.result[0].timestamp.length; i++) {
                     r.push({
-                      value: Math.round(data.result[0].hcho[i] * 1e2 ) / 1e2,
-                      timestamp: data.result[0].timestamp[i]
+                      value: Math.round(data.result[0].tvoc[i]/100 * 1e2 ) / 1e2,
+                      timestamp: data.result[0].timestamp[i],
+                      frontColor: ValueIncrementToAQIColor(data.result[0].tvoc[i]/100, [1,2,3,4,5])?.substring(0, 7)
                     })
                   }
                   
                   return r;
                 })()}
-                value={currentData.result[0].hcho[currentData.result[0].pm10.length - 1]}
+                value={currentData.result[0].tvoc[currentData.result[0].tvoc.length - 1] / 100}
                 unit=""
-                chartUnit=""
-                color={ValueIncrementToAQIColor(parseFloat(currentData.result[0].hcho[currentData.result[0].hcho.length - 1]) / 100, [1,2,3,4,5])}
-                decimalPlaces={2}
+                detailSearchLink={`/AM319/${deveui}/details?searchParams=tvoc`}
+                color={ValueIncrementToAQIColor(parseFloat(currentData.result[0].tvoc[currentData.result[0].tvoc.length - 1]) / 100, [1,2,3,4,5])}
+                chartMax={5}
+                sectionCount={5}
                 />
+                <LastUpdated time={new Date(currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentData.result[0].brand} model={currentData.result[0].model} />
             </>
           )
         }
@@ -237,7 +225,6 @@ const styles = EStyleSheet.create({
   container: {
     paddingVertical: '2rem',
     paddingHorizontal: '0.63rem',
-    backgroundColor: '$backgroundColor',
-    gap: '1.25rem',
+        gap: '1.25rem',
   }
 });

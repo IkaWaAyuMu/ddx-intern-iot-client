@@ -3,9 +3,9 @@ import { Slot } from "expo-router";
 import Header from "../../components/header";
 import { useEffect, useState } from "react";
 import { Orientation, OrientationChangeEvent, addOrientationChangeListener, getOrientationAsync, removeOrientationChangeListener } from "expo-screen-orientation";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
-import Animated, { Easing, cancelAnimation, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
+import { setStatusBarTranslucent } from "expo-status-bar";
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -15,7 +15,8 @@ export default function Layout() {
     'UberMoveText-Light': require('../../assets/fonts/UberMoveTextLight.otf'),
     'UberMoveText-Medium': require('../../assets/fonts/UberMoveTextMedium.otf'),
   });
-
+  
+  setStatusBarTranslucent(true)
   const [orientation, setOrientation] = useState<Orientation>(Orientation.UNKNOWN);
 
   useEffect(() => {
@@ -30,20 +31,6 @@ export default function Layout() {
     return () => removeOrientationChangeListener(subscription);
   }, []);
 
-  const rotation = useSharedValue(0);
-  const spin = useAnimatedStyle(() => {
-    return {transform: [{rotateZ: `${rotation.value}deg`}]};
-  }, [rotation.value]);
-  useEffect(() => {
-    rotation.value = withRepeat(
-      withTiming(360, {
-        duration: 1000,
-        easing: Easing.linear,
-      }), -1
-    );
-    return () => cancelAnimation(rotation);
-  }, []);
-
   if (!fontsLoaded) return <></>
   return (
     <>
@@ -56,8 +43,8 @@ export default function Layout() {
 
 const styles = EStyleSheet.create({
   background: {
-    width: '100%',
-    height: '100%',
+    width: '$infinity',
+    height: '$infinity',
     position: 'absolute',
     backgroundColor: '$backgroundColor',
   }

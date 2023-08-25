@@ -87,7 +87,7 @@ export function CardGroup(props: {
 
   return (
     <View style={styles.cardGroup}>
-      <View style={{ ...styles.background, backgroundColor: props.color ?? "#999999"}}/>
+      <View style={{ ...styles.background, backgroundColor: props.color ?? "#ffffff"}}/>
       <View style={styles.spacer1rem} />
       <View style={styles.cardGroupFrame}>
         <View style={{ flex: 1 }}>
@@ -117,7 +117,7 @@ const styles = EStyleSheet.create({
   },
   cardGroup: {
     borderWidth: 2,
-    borderColor: '$gray',
+    borderColor: '#000',
     borderRadius: '0.75rem',
     paddingHorizontal: '1rem',
     marginHorizontal: '1.25rem',
@@ -128,7 +128,7 @@ const styles = EStyleSheet.create({
     paddingLeft: '1rem',
   },
   cardGroupText: {
-    color: '$darkTextColor'
+    color: '$textColor'
   },
   cardGroupDescriptionText: {
     fontSize: '1rem',
@@ -145,6 +145,8 @@ const styles = EStyleSheet.create({
   seeMoreButton: {
     backgroundColor: '$gray',
     borderRadius: '0.875rem',
+    borderColor:'#888',
+    borderWidth: 1,
     height: '1.75rem',
     paddingTop: '0.6rem',
     paddingHorizontal: '0.5rem',
@@ -171,6 +173,8 @@ const styles = EStyleSheet.create({
     height: '0.5rem',
     borderRadius: 999,
     backgroundColor: '#e8e8e8',
+    borderColor: '#444',
+    borderWidth: 1,
   },
   activePaginationDot: {
     backgroundColor: '#000',
@@ -182,7 +186,7 @@ const styles = EStyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#e2e2e2',
+    borderColor: '#000',
     borderRadius: '0.75rem',
     paddingLeft: '1rem',
     paddingRight: '0.5rem',

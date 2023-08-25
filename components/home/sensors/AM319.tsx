@@ -58,6 +58,7 @@ export default function AM319(props: { deveui: string, data: any }) {
           title="Miscellaneous"
           description=""
           icon={<></>}
+          grouplink={`/AM319/${deveui}/misc`}
           data={[
             { title: "Light Level", value: data.light_level[lastIndex] ?? "-", unit: "" }
           ]}
@@ -89,12 +90,9 @@ export default function AM319(props: { deveui: string, data: any }) {
 
 const styles = EStyleSheet.create({
   briefInfo: {
-    backgroundColor: '$backgroundColor',
     gap: '1.25rem',
   },
-  dashboard: {
-    backgroundColor: '$backgroundColor',
-    width: '100%',
+  dashboard: {    width: '100%',
     height: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',

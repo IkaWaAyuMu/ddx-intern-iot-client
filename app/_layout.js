@@ -1,8 +1,7 @@
-import 'expo-router/entry';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as WebBrowser from "expo-web-browser";
 import { Amplify } from "aws-amplify";
-import awsconfig from "./app/aws-exports";
+import awsconfig from "./aws-exports";
 
 const isLocalHost = Boolean(__DEV__);
 const [productionRedirectSignIn, localRedirectSignIn] = awsconfig.oauth.redirectSignIn.split(",");
@@ -31,8 +30,9 @@ Amplify.configure({
 });
 
 EStyleSheet.build({
-  $infinity: '999rem',
-  $backgroundColor: '#595959',
+  $infinity: '999%',
+  $backgroundColor: '#c5c5c5',
+  $transparent: '#00000000',
   $lighterBackgroundColor: '#999999',
   $textColor: '#000',
   $darkTextColor: '#fff',
