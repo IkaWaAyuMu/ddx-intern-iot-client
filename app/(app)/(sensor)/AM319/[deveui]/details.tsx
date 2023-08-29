@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Redirect, useLocalSearchParams } from 'expo-router';
-import { Text, ScrollView, Button } from 'react-native';
+import { Text, ScrollView, Button, View, Pressable } from 'react-native';
 import Slider from '@react-native-community/slider';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import DropDownPicker, { ValueType } from 'react-native-dropdown-picker';
-import { PMVtoFavor, ValueBetweenToAQIColor, ValueBetweenToTempColor, ValueIncrementToAQIColor } from '../../../../../components/toFavor';
-import { LongGraph } from '../../../../../components/home/components/longGraph';
+import { LongGraph } from '../../../../../components/details/longGraph';
 import CalculatePMV from '../../../../../components/calculatePMV';
 
 export default function AM319Details() {
   const localSearchParams = useLocalSearchParams();
-  const { deveui } = localSearchParams;
+  const { deveui, searchParams } = localSearchParams;
 
   const [isUserLoading, setIsUserLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | undefined>(undefined);
-  const [isDataLoading, setIsDataLoading] = useState<boolean>(true);
+  const [isDataLoading, setIsDataLoading] = useState<boolean>(false);
   const [user, setUser] = useState<any>(null);
 
   const [dataPointWidthMultiplier, setDataPointWidthMultiplier] = useState<number>(1);
   const [propOpen, setPropOpen] = useState(false);
-  const [propValues, setPropValues] = useState<ValueType[]>([]);
+  const [propValues, setPropValues] = useState<ValueType[]>([searchParams! as string]);
   const [propItems, setPropItems] = useState([
     { label: 'Predicted Mean Vote', value: 'pmv' },
     { label: 'Temperature', value: 'temperature' },
@@ -33,6 +33,13 @@ export default function AM319Details() {
     { label: 'Total Volatile Organic Compounds', value: 'tvoc' },
     { label: 'Light Level', value: 'light_level' },
   ]);
+
+  const [startDate, setStartDate] = useState<Date>(new Date(new Date().setHours(0,0,0,0))); 
+  const [isStartDateShow, setIsStartDateShow] = useState<boolean>(false);
+  const [isStartTimeShow, setIsStartTimeShow] = useState<boolean>(false);
+  const [endDate, setEndDate] = useState<Date>(new Date(new Date().setSeconds(0))); 
+  const [isEndDateShow, setIsEndDateShow] = useState<boolean>(false);
+  const [isEndTimeShow, setIsEndTimeShow] = useState<boolean>(false);
 
   const [data, setData] = useState<any>({ error: "No data" });
 
@@ -46,6 +53,7 @@ export default function AM319Details() {
 
   // Fetch the data
   const fetchData = async () => {
+    console.log("fetched");
     setIsDataLoading(true);
     let tempQuery = propValues;
     if (tempQuery.includes('pmv')) { tempQuery.push('temperature'); tempQuery.push('humidity'); tempQuery = tempQuery.filter(e => e != 'pmv') }
@@ -114,7 +122,7 @@ export default function AM319Details() {
     const exponent = Math.pow(10, decimalDigit);
     for (let i = 0; i < data[0].timestamp.length; i++) {
       r.push({
-        value: Math.round(data[0][prop][i] * exponent) / exponent,
+        value: Math.round(data[0][prop][i] / (prop == 'tvoc' ? 100 : 1) * exponent) / exponent,
         timestamp: data[0].timestamp[i],
       })
     }
@@ -122,12 +130,19 @@ export default function AM319Details() {
     return r;
   }
 
+  console.log(data);
+  console.log(propValues);
+
   return (
     <>
       {!isUserLoading && !user && <Redirect href='/' />}
       <ScrollView
         contentContainerStyle={styles.container}
       >
+        {isStartDateShow && <DateTimePicker value={startDate} mode={'date'} onChange={(event, date) => {setStartDate(new Date((date ?? new Date()).setSeconds(0))); setIsStartDateShow(false); if (event.type != 'dismissed') setIsStartTimeShow(true);}} maximumDate={endDate} />}
+        {isStartTimeShow && <DateTimePicker value={startDate} mode={'time'} onChange={(event, date) => {setStartDate(new Date((date ?? new Date()).setSeconds(0))); setIsStartTimeShow(false);}} maximumDate={endDate} />}
+        {isEndDateShow && <DateTimePicker value={endDate} mode={'date'} onChange={(event, date) => {setEndDate(new Date((date ?? new Date()).setSeconds(0))); if (startDate > new Date((date ?? new Date()).setSeconds(0))) setStartDate(new Date((date ?? new Date()).setSeconds(0))); setIsEndDateShow(false); if (event.type != 'dismissed') setIsEndTimeShow(true);}} maximumDate={new Date()} />}
+        {isEndTimeShow && <DateTimePicker value={endDate} mode={'time'} onChange={(event, date) => {setEndDate(new Date((date ?? new Date()).setSeconds(0))); if (startDate > new Date((date ?? new Date()).setSeconds(0))) setStartDate(new Date((date ?? new Date()).setSeconds(0))); setIsEndTimeShow(false);}} maximumDate={new Date()}/>}
         <DropDownPicker
           open={propOpen}
           value={propValues}
@@ -141,21 +156,24 @@ export default function AM319Details() {
           mode="SIMPLE"
           listMode="MODAL"
         />
-        <Button title={"OK"} onPress={fetchData} />
-
+        <View style={{flexDirection: 'row', gap: 5}}><Pressable style={{flex:1, backgroundColor: "#00a0ff", borderRadius: 2}} onPress={() => setIsStartDateShow(true)}><Text style={{textAlign: 'center', color: '#ffffff'}}>Start</Text></Pressable><Text style={{flex:1}}>{startDate.toLocaleString()}</Text></View>
+        <View style={{flexDirection: 'row', gap: 5}}><Pressable style={{flex:1, backgroundColor: "#00a0ff", borderRadius: 2}} onPress={() => setIsEndDateShow(true)}><Text style={{textAlign: 'center', color: '#ffffff'}}>End</Text></Pressable><Text style={{flex:1}}>{endDate.toLocaleString()}</Text></View>
+        <Button title={"OK"} onPress={propValues[0] != undefined ? fetchData : () => {}} />
+        <Text>Zoom</Text>
         <Slider
           style={{ width: "100%", height: 40 }}
           minimumValue={0.1}
           value={dataPointWidthMultiplier}
-          onValueChange={setDataPointWidthMultiplier}
+          onSlidingComplete={setDataPointWidthMultiplier}
           maximumValue={1}
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
         />
+        {isDataLoading && <Text>Loading...</Text>}
         {!isDataLoading && data &&
-          (error ? <Text>{error}</Text> :
+          ((data.error || error) ? <Text>{data.error ?? error}</Text> :
             <>
-              {propValues.includes('pmv') && <LongGraph
+              {propValues.includes('pmv') && data[0].temperature && data[0].humidity && <LongGraph
                 title='Predicted Mean Vote'
                 data={(() => {
                   const r = []
@@ -178,25 +196,63 @@ export default function AM319Details() {
                 unit=""
                 dataPointWidthMultiplier={dataPointWidthMultiplier}
                 sectionCount={3}
-                chartMin={3}
-                chartMax={-3}
+                chartMin={-3}
+                chartMax={3}
               />}
-              {propValues.includes('temperature') && <LongGraph
+              {propValues.includes('temperature') && data[0].temperature && <LongGraph
                 title='Temperature'
                 data={MakeData('temperature', 1)}
                 unit="degrees Celsius"
                 dataPointWidthMultiplier={dataPointWidthMultiplier}
-                chartMax={50}
-                sectionCount={10}
+                yAxisSuffix='°C'
               />}
-              {propValues.includes('humidity') && <LongGraph
+              {propValues.includes('humidity') && data[0].humidity && <LongGraph
                 title="Relative Humidity"
                 data={MakeData('humidity', 1)}
                 unit="percent"
                 dataPointWidthMultiplier={dataPointWidthMultiplier}
-                chartMax={100}
-                sectionCount={10}
                 yAxisSuffix="%"
+              />}
+              {propValues.includes('pm2_5') && data[0].pm2_5 && <LongGraph
+                title="Particulate Matter 2.5"
+                data={MakeData('pm2_5', 0)}
+                unit="micrograms per cubic meter"
+                dataPointWidthMultiplier={dataPointWidthMultiplier}
+              />}
+              {propValues.includes('pm10') && data[0].pm10 && <LongGraph
+                title="Particulate Matter 10"
+                data={MakeData('pm10', 0)}
+                unit="micrograms per cubic meter"
+                dataPointWidthMultiplier={dataPointWidthMultiplier}
+              />}
+              {propValues.includes('co2') && data[0].co2 && <LongGraph
+                title="Carbon Dioxide"
+                data={MakeData('co2', 0)}
+                unit="parts per million"
+                dataPointWidthMultiplier={dataPointWidthMultiplier}
+              />}
+              {propValues.includes('hcho') && data[0].hcho && <LongGraph
+                title="Formaldehyde"
+                data={MakeData('hcho', 2)}
+                unit="parts per billion"
+                chartMax={0.1}
+                dataPointWidthMultiplier={dataPointWidthMultiplier}
+              />}
+              {propValues.includes('tvoc') && data[0].tvoc && <LongGraph
+                title="Total Volatile Organic Compounds"
+                data={MakeData('tvoc', 2)}
+                unit="IAQ Rating"
+                chartMin={1}
+                chartMax={2}
+                dataPointWidthMultiplier={dataPointWidthMultiplier}
+              />}
+              {propValues.includes('light_level') && data[0].light_level && <LongGraph
+                title="Light Level"
+                data={MakeData('light_level', 1)}
+                unit=""
+                chartMin={0}
+                chartMax={5}
+                dataPointWidthMultiplier={dataPointWidthMultiplier}
               />}
             </>
           )

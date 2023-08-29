@@ -4,7 +4,7 @@ import { Text, ScrollView, RefreshControl } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { DetailCardGroup, LastUpdated } from '../../../../../components/home/components/detailCard';
+import { DetailCardGroup, LastUpdated } from '../../../../../components/details/detailCard';
 import { ValueIncrementToAQIColor } from '../../../../../components/toFavor';
 
 export default function AM319IAQ() {
@@ -99,7 +99,9 @@ export default function AM319IAQ() {
     fetchData();
     fetchCurrentData();
   }, [setData, setIsDataLoading, setIsFirstDataLoading, setCurrentData, setIsCurrentDataLoading, setIsFirstCurrentDataLoading])
-    
+  
+  const currentDataNotExist = currentData.result == undefined;
+  
   return (
     <>
       {!isUserLoading && !user && <Redirect href='/' />}
@@ -125,10 +127,10 @@ export default function AM319IAQ() {
                   
                   return r;
                 })()}
-                value={currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1]}
                 unit="microgram per cubic meter"
                 detailSearchLink={`/AM319/${deveui}/details?searchParams=pm2_5`}
-                color={ValueIncrementToAQIColor(currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1], [10, 12, 15, 35.5, 55.5])}
+                color={currentDataNotExist ? undefined : ValueIncrementToAQIColor(currentData.result[0].pm2_5[currentData.result[0].pm2_5.length - 1], [10, 12, 15, 35.5, 55.5])}
                 />
                 <DetailCardGroup
                 title="Particulate Matter 10"
@@ -145,10 +147,10 @@ export default function AM319IAQ() {
                   
                   return r;
                 })()}
-                value={currentData.result[0].pm10[currentData.result[0].pm10.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].pm10[currentData.result[0].pm10.length - 1]}
                 unit="microgram per cubic meter"
                 detailSearchLink={`/AM319/${deveui}/details?searchParams=pm10`}
-                color={ValueIncrementToAQIColor(currentData.result[0].pm10[currentData.result[0].pm10.length - 1], [20, 30, 50, 155, 255])}
+                color={currentDataNotExist ? undefined : ValueIncrementToAQIColor(currentData.result[0].pm10[currentData.result[0].pm10.length - 1], [20, 30, 50, 155, 255])}
                 />
                 <DetailCardGroup
                 title="Carbon dioxide"
@@ -165,10 +167,10 @@ export default function AM319IAQ() {
                   
                   return r;
                 })()}
-                value={currentData.result[0].co2[currentData.result[0].hcho.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].co2[currentData.result[0].hcho.length - 1]}
                 unit="part per million"
                 detailSearchLink={`/AM319/${deveui}/details?searchParams=co2`}
-                color={ValueIncrementToAQIColor(currentData.result[0].co2[currentData.result[0].co2.length - 1], [200, 500, 1000, 2000, 3000])}
+                color={currentDataNotExist ? undefined : ValueIncrementToAQIColor(currentData.result[0].co2[currentData.result[0].co2.length - 1], [200, 500, 1000, 2000, 3000])}
                 />
                 <DetailCardGroup
                 title="Formaldehyde"
@@ -185,10 +187,10 @@ export default function AM319IAQ() {
                   
                   return r;
                 })()}
-                value={currentData.result[0].hcho[currentData.result[0].hcho.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].hcho[currentData.result[0].hcho.length - 1]}
                 unit="milligram per cubic meter"
                 detailSearchLink={`/AM319/${deveui}/details?searchParams=hcho`}
-                color={ValueIncrementToAQIColor(currentData.result[0].hcho[currentData.result[0].hcho.length - 1], [0.05, 0.1, 0.25, 0.3, 0.5])}
+                color={currentDataNotExist ? undefined : ValueIncrementToAQIColor(currentData.result[0].hcho[currentData.result[0].hcho.length - 1], [0.05, 0.1, 0.25, 0.3, 0.5])}
                 chartMax={0.5}
                 />
                 <DetailCardGroup
@@ -206,14 +208,14 @@ export default function AM319IAQ() {
                   
                   return r;
                 })()}
-                value={currentData.result[0].tvoc[currentData.result[0].tvoc.length - 1] / 100}
+                value={currentDataNotExist ? "-" : currentData.result[0].tvoc[currentData.result[0].tvoc.length - 1] / 100}
                 unit=""
                 detailSearchLink={`/AM319/${deveui}/details?searchParams=tvoc`}
-                color={ValueIncrementToAQIColor(parseFloat(currentData.result[0].tvoc[currentData.result[0].tvoc.length - 1]) / 100, [1,2,3,4,5])}
+                color={currentDataNotExist ? undefined : ValueIncrementToAQIColor(parseFloat(currentData.result[0].tvoc[currentData.result[0].tvoc.length - 1]) / 100, [1,2,3,4,5])}
                 chartMax={5}
                 sectionCount={5}
                 />
-                <LastUpdated time={new Date(currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentData.result[0].brand} model={currentData.result[0].model} />
+                <LastUpdated time={new Date(currentDataNotExist ? undefined : currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentDataNotExist ? "" : currentData.result[0].brand} model={currentDataNotExist ? "" : currentData.result[0].model} />
             </>
           )
         }

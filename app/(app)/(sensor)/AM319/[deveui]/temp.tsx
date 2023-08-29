@@ -4,7 +4,7 @@ import { ScrollView, RefreshControl, Text } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { DetailCardGroup, LastUpdated } from '../../../../../components/home/components/detailCard';
+import { DetailCardGroup, LastUpdated } from '../../../../../components/details/detailCard';
 import { PMVtoFavor, ValueBetweenToAQIColor, ValueBetweenToTempColor } from '../../../../../components/toFavor';
 import CalculatePMV from '../../../../../components/calculatePMV';
 
@@ -120,6 +120,8 @@ export default function AM319Temperature() {
     return r;
   })();
 
+  const currentDataNotExist = currentData.result == undefined;
+
   return (
     <>
       {!isUserLoading && !user && <Redirect href='/' />}
@@ -133,7 +135,7 @@ export default function AM319Temperature() {
               <DetailCardGroup
                 title="Predicted Mean Vote"
                 data={PMVData}
-                value={Math.round(CalculatePMV(
+                value={currentDataNotExist  ? "-" : Math.round(CalculatePMV(
                   data.result[0].temperature[0],
                   data.result[0].temperature[0],
                   0,
@@ -141,7 +143,7 @@ export default function AM319Temperature() {
                   1.2,
                   0.57).pmv
                   * 1e2) / 1e2}
-                color={PMVtoFavor(currentData.result[0].temperature[0], currentData.result[0].humidity[0]).color}
+                color={currentDataNotExist ? undefined : PMVtoFavor(currentData.result[0].temperature[0], currentData.result[0].humidity[0]).color}
                 unit=""
                 detailSearchLink={`${searchLink}pmv`}
                 sectionCount={Math.ceil(Math.max(Math.abs(Math.min(PMVData.reduce((prev, curr) => prev.value < curr.value ? prev : curr).value, -2)), Math.max(PMVData.reduce((prev, curr) => prev.value > curr.value ? prev : curr).value, 2)))}
@@ -163,10 +165,10 @@ export default function AM319Temperature() {
 
                   return r;
                 })()}
-                value={currentData.result[0].temperature[currentData.result[0].temperature.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].temperature[currentData.result[0].temperature.length - 1]}
                 unit="degrees Celsius"
                 detailSearchLink={`${searchLink}temperature`}
-                color={ValueBetweenToTempColor(currentData.result[0].temperature[currentData.result[0].temperature.length - 1], [21, 20, 19, 18, 17], [27, 28, 29, 30, 31])}
+                color={currentDataNotExist ? undefined : ValueBetweenToTempColor(currentData.result[0].temperature[currentData.result[0].temperature.length - 1], [21, 20, 19, 18, 17], [27, 28, 29, 30, 31])}
                 chartMax={30}
                 yOffset={10}
                 sectionCount={10}
@@ -186,15 +188,15 @@ export default function AM319Temperature() {
 
                   return r;
                 })()}
-                value={currentData.result[0].humidity[currentData.result[0].humidity.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].humidity[currentData.result[0].humidity.length - 1]}
                 unit="percent"
                 detailSearchLink={`${searchLink}humidity`}
-                color={ValueBetweenToTempColor(currentData.result[0].humidity[currentData.result[0].humidity.length - 1], [40, 35, 30, 25, 20], [60, 65, 70, 75, 80])}
+                color={currentDataNotExist ? undefined : ValueBetweenToTempColor(currentData.result[0].humidity[currentData.result[0].humidity.length - 1], [40, 35, 30, 25, 20], [60, 65, 70, 75, 80])}
                 chartMax={100}
                 sectionCount={10}
                 yAxisSuffix="%"
               />
-              <LastUpdated time={new Date(currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentData.result[0].brand} model={currentData.result[0].model} />
+              <LastUpdated time={new Date(currentDataNotExist ? undefined : currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentDataNotExist ? "" : currentData.result[0].brand} model={currentDataNotExist ? "" : currentData.result[0].model} />
 
             </>
           )

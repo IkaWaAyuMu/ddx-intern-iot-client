@@ -4,7 +4,7 @@ import { Text, ScrollView, RefreshControl } from 'react-native';
 import { Auth } from 'aws-amplify';
 import { API } from '@aws-amplify/api'
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { DetailCardGroup, LastUpdated } from '../../../../../components/home/components/detailCard';
+import { DetailCardGroup, LastUpdated } from '../../../../../components/details/detailCard';
 
 export default function AM319Misc() {
   const localSearchParams = useLocalSearchParams();
@@ -96,6 +96,8 @@ export default function AM319Misc() {
     fetchCurrentData();
   }, [setData, setIsDataLoading, setIsFirstDataLoading, setCurrentData, setIsCurrentDataLoading, setIsFirstCurrentDataLoading])
 
+  const currentDataNotExist = currentData.result == undefined;
+
   return (
     <>
       {!isUserLoading && !user && <Redirect href='/' />}
@@ -120,13 +122,13 @@ export default function AM319Misc() {
 
                   return r;
                 })()}
-                value={currentData.result[0].light_level[currentData.result[0].light_level.length - 1]}
+                value={currentDataNotExist ? "-" : currentData.result[0].light_level[currentData.result[0].light_level.length - 1]}
                 unit=""
                 detailSearchLink={`/AM319/${deveui}/details?searchParams=light_level`}
                 chartMax={5}
                 sectionCount={5}
               />
-              <LastUpdated time={new Date(currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentData.result[0].brand} model={currentData.result[0].model} />
+                <LastUpdated time={new Date(currentDataNotExist ? undefined : currentData.result[0].timestamp[currentData.result[0].timestamp.length - 1])} brand={currentDataNotExist ? "" : currentData.result[0].brand} model={currentDataNotExist ? "" : currentData.result[0].model} />
             </>)}
       </ScrollView>
     </>);
