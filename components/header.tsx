@@ -71,6 +71,8 @@ export default function Header() {
         <View />
         <View style={styles.main}>
           <Link href='/home' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Home</Text></Link>
+          <Link href='/AM319/24e124710c409355/temp' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Temperature</Text></Link>
+          <Link href='/AM319/24e124710c409355/details?searchParams=pmv' onPress={() => { leftTranslation.value = leftTranslation.value == 100 ? 0 : 100 }}><Text style={styles.text}>Details</Text></Link>
         </View>
         <View style={styles.bottom}>
           <Text style={styles.bottomText}>You are logging in as {user ? user.attributes.name : "ANONYMOUS"}.</Text>

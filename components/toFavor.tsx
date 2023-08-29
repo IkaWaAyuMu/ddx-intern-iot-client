@@ -64,10 +64,10 @@ export const PMVValuetoFavor = (pmv: number): {pmv: number, desc: string, color?
 
 export const IAQtoFavor = (pm2_5: number, pm10: number, co2: number, hcho: number, tvoc: number): {desc: string, color?: string} => {
   return (
-    pm2_5 > 55.5 || pm10 > 255 || co2 > 5000 || hcho > 0.5 || tvoc > 5 ? {desc:"Very bad", color:"#8f3f97"} :
-    pm2_5 > 35.5 || pm10 > 155 || co2 > 2500 || hcho > 0.3 || tvoc > 4 ? {desc:"Bad", color:"#ffa0a0"} :
-    pm2_5 > 15 || pm10 > 50 || co2 > 1200 || hcho > 0.25 || tvoc > 3 ? {desc:"Moderate", color:"#ff7e80"} :
-    pm2_5 > 12 || pm10 > 30 || co2 > 900 || hcho > 0.1 || tvoc > 2 ? {desc:"Good", color:"#ffff80"} :
+    pm2_5 > 55.5 || pm10 > 255 || co2 > 2500 || hcho > 0.5 || tvoc > 5 ? {desc:"Very bad", color:"#8f3f97"} :
+    pm2_5 > 35.5 || pm10 > 155 || co2 > 1200 || hcho > 0.3 || tvoc > 4 ? {desc:"Bad", color:"#ffa0a0"} :
+    pm2_5 > 15 || pm10 > 50 || co2 > 900 || hcho > 0.25 || tvoc > 3 ? {desc:"Moderate", color:"#ff7e80"} :
+    pm2_5 > 12 || pm10 > 30 || co2 > 750 || hcho > 0.1 || tvoc > 2 ? {desc:"Good", color:"#ffff80"} :
     {desc:"Very good", color: "#80b080"}
   )
 }

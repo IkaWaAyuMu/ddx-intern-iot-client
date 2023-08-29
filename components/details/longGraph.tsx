@@ -37,21 +37,33 @@ export function LongGraph(props: {
 
   const data = props.data;
   const minValue = data.reduce((prev, curr) => curr.value < prev.value ? curr : prev).value;
+  const min = data.findLast((e) => e.value == minValue);
   const maxValue = data.reduce((prev, curr) => curr.value > prev.value ? curr : prev).value;
+  const max = data.findLast((e) => e.value == maxValue);
+  const meanValue = data.reduce((prev, curr) => prev + curr.value, 0) / data.length;
+
+  let significantNumber = Math.floor(Math.log10(Math.max(Math.abs(minValue == 0 ? 0.01 : minValue), (Math.abs(maxValue == 0 ? 0.01 : maxValue)))))
+  if (significantNumber <= 0) significantNumber = 0;
 
   const chartData = data.map((e) => {
     return {
       value: e.value,
-      dataPointText: (props.yAxisPrefix ?? "") + e.value.toString() + (props.yAxisSuffix ?? ""),
-      labelComponent: () => (
-        <Text style={{ fontFamily: 'UberMoveMono-Medium', color: '#808080', fontSize: 5, transform: [{rotate: '90deg'}], width: 40}}>{new Date(e.timestamp).toLocaleDateString('en-US', {
-          day: '2-digit',
-          month: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
-        })}</Text>
-      ),
+      dataPointLabelComponent: () => 
+      <View style={{transform: [{rotate: '-90deg'}, {translateX: 10}, {translateY: 10}]}}>
+        <Text style={{fontFamily: 'UberMoveMono-Medium', color: e.value == maxValue ? '#ff0000' : (e.value == minValue ? '#0000ff' : '#404040'), fontSize: 5}}>
+          {`${(props.yAxisPrefix ?? "")}${e.value.toString()}${(props.yAxisSuffix ?? "")}`}
+        </Text>
+        <Text style={{fontFamily: 'UberMoveMono-Medium', color: '#808080', fontSize: 3}}>
+          {`${
+          new Date(e.timestamp).toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          })}`}
+        </Text>
+      </View>,
     }
   })
 
@@ -59,30 +71,71 @@ export function LongGraph(props: {
 
   return (
     <View style={styles.cardGroup}>
-      <View style={{ ...styles.background, backgroundColor: "#999999"}}/>
+      <View style={{ ...styles.background, backgroundColor: "#404040"}}/>
       <View style={styles.spacerp75rem} />
       <Text style={{ ...styles.cardText, ...styles.cardTitle }}>{props.title}</Text>
       <Text style={{ ...styles.cardText, ...styles.cardUnit }}>{props.unit}</Text>
       <View style={styles.spacerp75rem} />
-      <View style={{backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden', paddingVertical: 10}}>
+      <View style={{backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden'}}>
         <LineChart
+          areaChart
           //@ts-ignore
           data={chartData}
+          showReferenceLine1
+          referenceLine1Position={meanValue - (props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : 0)}
+          //@ts-ignore
+          referenceLine1Config={{
+            color: "#000000",
+          }}
+          showReferenceLine2
+          referenceLine2Position={minValue - (props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : 0)}
+          //@ts-ignore
+          referenceLine2Config={{
+            color: "#0000ff",
+          }}
+          showReferenceLine3
+          referenceLine3Position={maxValue - (props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : 0)}
+          //@ts-ignore
+          referenceLine3Config={{
+            color: "#ff0000",
+          }}
           height={300 / ((props.chartMin ?? 0) < 0 ? 2 : 1)}
           initialSpacing={Dimensions.get("window").width / (isPotrait ? 30 : 70) * props.dataPointWidthMultiplier}
           spacing={Dimensions.get("window").width / (isPotrait ? 15 : 30) * props.dataPointWidthMultiplier}
           xAxisLabelTextStyle={{ fontFamily: 'UberMoveMono-Medium', fontSize: 10, left: Dimensions.get("window").width / (isPotrait ? 50 : 150), top: -50 }}
           xAxisIndicesWidth={Dimensions.get("window").width / (isPotrait ? 50 : 150)}
           showFractionalValues
+          startFillColor='#ff8080'
+          startOpacity={0.5}
+          endFillColor='#80c0ff'
+          endOpacity={0.5}
           yAxisLabelWidth={20}
           yAxisTextStyle={{ fontFamily: 'UberMoveMono-Medium', fontSize: 6 }}
           yAxisLabelPrefix={props.yAxisPrefix}
           yAxisLabelSuffix={props.yAxisSuffix}
           noOfSections={props.sectionCount ?? 5}
+          yAxisOffset={props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : undefined}
           minValue={props.chartMin}
-          maxValue={props.chartMax}
-          curved
+          maxValue={Math.max((maxValue - minValue + (Math.pow(10, significantNumber) / 4) > 1 ? Math.ceil(maxValue - minValue + (Math.pow(10, significantNumber) / 4)) : (maxValue - minValue + (Math.pow(10, significantNumber) / 4) )), props.chartMax ?? 0 ) }
         />
+      </View>
+      <View style={styles.spacerp75rem} />
+      <View>
+        <Text style={{ ...styles.cardText, ...styles.cardValue }}>Max : {props.yAxisPrefix}{max!.value}{props.yAxisSuffix} at {new Date(max!.timestamp).toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          })}</Text>
+        <Text style={{ ...styles.cardText, ...styles.cardValue }}>Mean: {props.yAxisPrefix}{meanValue.toFixed(2)}{props.yAxisSuffix}</Text>
+        <Text style={{ ...styles.cardText, ...styles.cardValue }}>Min : {props.yAxisPrefix}{min!.value}{props.yAxisSuffix} at {new Date(min!.timestamp).toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          })}</Text>
       </View>
       <View style={styles.spacerp75rem} />
     </View>
@@ -114,9 +167,10 @@ const styles = EStyleSheet.create({
     lineHeight: '2rem',
   },
   cardValue: {
-    fontSize: '2.25rem',
+    fontSize: '0.75rem',
     fontFamily: 'UberMoveMono-Medium',
-    lineHeight: '2.25rem',
+    lineHeight: '0.75rem',
+    textAlign: 'left',
   },
   cardUnit: {
     fontSize: '1rem',
