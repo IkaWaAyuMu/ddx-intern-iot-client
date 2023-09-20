@@ -49,11 +49,11 @@ export function LongGraph(props: {
     return {
       value: e.value,
       dataPointLabelComponent: () => 
-      <View style={{transform: [{rotate: '-90deg'}, {translateX: 10}, {translateY: 10}]}}>
-        <Text style={{fontFamily: 'UberMoveMono-Medium', color: e.value == maxValue ? '#ff0000' : (e.value == minValue ? '#0000ff' : '#404040'), fontSize: 5}}>
+      <View style={{transform: [{rotate: '-90deg'}, {translateX: 10 * (props.dataPointWidthMultiplier > 1 ? props.dataPointWidthMultiplier * 1.5 : 1) }, {translateY: 10 * (props.dataPointWidthMultiplier > 1 ? 0.1 / props.dataPointWidthMultiplier  : 1)}]}}>
+        <Text style={{fontFamily: 'UberMoveMono-Medium', color: e.value == maxValue ? '#ff0000' : (e.value == minValue ? '#0000ff' : '#404040'), fontSize: 5 * (props.dataPointWidthMultiplier > 1 ? props.dataPointWidthMultiplier : 1)}}>
           {`${(props.yAxisPrefix ?? "")}${e.value.toString()}${(props.yAxisSuffix ?? "")}`}
         </Text>
-        <Text style={{fontFamily: 'UberMoveMono-Medium', color: '#808080', fontSize: 3}}>
+        <Text style={{fontFamily: 'UberMoveMono-Medium', color: '#808080', fontSize: 3 * (props.dataPointWidthMultiplier > 1 ? props.dataPointWidthMultiplier : 1)}}>
           {`${
           new Date(e.timestamp).toLocaleDateString('en-US', {
             day: '2-digit',
@@ -76,9 +76,10 @@ export function LongGraph(props: {
       <Text style={{ ...styles.cardText, ...styles.cardTitle }}>{props.title}</Text>
       <Text style={{ ...styles.cardText, ...styles.cardUnit }}>{props.unit}</Text>
       <View style={styles.spacerp75rem} />
-      <View style={{backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden'}}>
+      <View style={{backgroundColor: '#fff', borderRadius: 10, overflow: 'hidden', paddingTop: 15*props.dataPointWidthMultiplier}}>
         <LineChart
           areaChart
+          hideDataPoints={props.dataPointWidthMultiplier < 0.4}
           //@ts-ignore
           data={chartData}
           showReferenceLine1
@@ -100,7 +101,7 @@ export function LongGraph(props: {
             color: "#ff0000",
           }}
           height={300 / ((props.chartMin ?? 0) < 0 ? 2 : 1)}
-          initialSpacing={Dimensions.get("window").width / (isPotrait ? 30 : 70) * props.dataPointWidthMultiplier}
+          initialSpacing={5 + Dimensions.get("window").width / (isPotrait ? 30 : 70) * props.dataPointWidthMultiplier}
           spacing={Dimensions.get("window").width / (isPotrait ? 15 : 30) * props.dataPointWidthMultiplier}
           xAxisLabelTextStyle={{ fontFamily: 'UberMoveMono-Medium', fontSize: 10, left: Dimensions.get("window").width / (isPotrait ? 50 : 150), top: -50 }}
           xAxisIndicesWidth={Dimensions.get("window").width / (isPotrait ? 50 : 150)}

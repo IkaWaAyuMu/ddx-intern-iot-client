@@ -58,7 +58,7 @@ export default function Home() {
         refreshControl={<RefreshControl refreshing={isDataLoading} onRefresh={onRefresh} />}
       >
         {!isFirstDataLoading &&
-          (data.error ? <Text>{data.error}</Text> :
+          (data.error ? <View><Text>{data.error}</Text></View> :
             !data.result[0] ? <View /> :
               (data.result[0].model === "AM319" && <AM319 deveui={deveui} data={data.result[0]} />))
         }

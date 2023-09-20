@@ -7,7 +7,6 @@ export const getAM319Data = /* GraphQL */ `
     getAM319Data(args: $args) {
       statusCode
       result {
-        NextToken
         deveui
         brand
         model
@@ -34,6 +33,7 @@ export const getDownsampledAM319Data = /* GraphQL */ `
   query GetDownsampledAM319Data($args: GetDataArgs) {
     getDownsampledAM319Data(args: $args) {
       statusCode
+      NextToken
       result {
         NextToken
         deveui
