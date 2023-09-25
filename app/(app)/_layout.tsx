@@ -1,51 +1,55 @@
-import { useFonts } from "expo-font";
-import { Slot } from "expo-router";
-import Header from "../../components/header";
-import { useEffect, useState } from "react";
-import { Orientation, OrientationChangeEvent, addOrientationChangeListener, getOrientationAsync, removeOrientationChangeListener } from "expo-screen-orientation";
-import { View } from "react-native";
-import EStyleSheet from "react-native-extended-stylesheet";
-import { setStatusBarTranslucent } from "expo-status-bar";
+import { Auth, Hub } from 'aws-amplify';
+import { Slot, Stack } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import User from '../../components/user';
 
 export default function Layout() {
-  const [fontsLoaded] = useFonts({
-    'UberMove-Medium': require('../../assets/fonts/UberMoveMedium.otf'),
-    'UberMove-Bold': require('../../assets/fonts/UberMoveBold.otf'),
-    'UberMoveMono-Medium': require('../../assets/fonts/UberMoveMono-Medium.ttf'),
-    'UberMoveText-Light': require('../../assets/fonts/UberMoveTextLight.otf'),
-    'UberMoveText-Medium': require('../../assets/fonts/UberMoveTextMedium.otf'),
-  });
-  
-  setStatusBarTranslucent(true)
-  const [orientation, setOrientation] = useState<Orientation>(Orientation.UNKNOWN);
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<any>(null);
+  const [customState, setCustomState] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkOrientation = async () => {
-      const orientation = await getOrientationAsync();
-      setOrientation(orientation);
-    };
-    const handleOrientationChange = (o: OrientationChangeEvent) => { setOrientation(o.orientationInfo.orientation) };
-    const subscription = addOrientationChangeListener(handleOrientationChange);
+    const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
+      switch (event) {
+        case "signIn":
+          setUser(data);
+          break;
+        case "signOut":
+          setUser(null);
+          break;
+        case "customOAuthState":
+          setCustomState(data);
+          break;
+      }
+    });
 
-    checkOrientation();
-    return () => removeOrientationChangeListener(subscription);
+    Auth.currentAuthenticatedUser()
+      .then((currentUser) => setUser(currentUser))
+      .catch((e) => console.log(e))
+      .finally(() => setIsLoading(false));
+
+    return unsubscribe;
   }, []);
 
-  if (!fontsLoaded) return <></>
-  return (
-    <>
-      <View style={styles.background}/>
-      {(orientation === Orientation.PORTRAIT_UP || orientation === Orientation.PORTRAIT_DOWN) && <Header/>}
-      <Slot/>
-    </>
-  )
+  if (isLoading) return null;
+
+  if (!user) return (
+    <View style={styles.container}>
+      <User />
+      <Text>Yang mai dai log in ai sus</Text>
+    </View>
+  );
+
+  return <Stack screenOptions={{headerShown: false}}/>;
 }
 
 const styles = EStyleSheet.create({
-  background: {
-    width: '$infinity',
-    height: '$infinity',
-    position: 'absolute',
-    backgroundColor: '$backgroundColor',
-  }
+  container: {
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
