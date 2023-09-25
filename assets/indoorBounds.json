@@ -1,0 +1,27 @@
+{
+  "pm2_5": {
+    "label": ["Very Good", "Good", "Medium", "Slightly Poor", "Moderate", "Unhealthy for Sensitive Groups"],
+    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
+    "upperBounds": [10, 12, 15, 35.4, 55.5]
+  },
+  "pm10": {
+    "label": ["Very Good", "Good", "Medium", "Slightly Poor", "Moderate", "Unhealthy for Sensitive Groups"],
+    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
+    "upperBounds": [20, 30, 50, 154, 254]
+  },
+  "hcho": {
+    "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
+    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
+    "upperBounds": [0.05, 0.1, 0.25, 0.3, 0.5]
+  },
+  "co2": {
+    "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
+    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
+    "upperBounds": [750, 900, 1200, 2500, 5000]
+  },
+  "tvoc": {
+    "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
+    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
+    "upperBounds": [200, 500, 1000, 2000, 3000]
+  }
+}

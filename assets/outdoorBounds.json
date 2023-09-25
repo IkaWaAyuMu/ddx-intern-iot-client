@@ -1,0 +1,36 @@
+{
+  "aqi": {
+    "upperBounds": [50, 100, 150, 200, 300, 400, 500],
+    "lowerBounds": [0, 51, 101, 151, 201, 301, 401],
+    "label": ["Good", "Moderate", "Unhealthy for Sensitive Groups", "Unhealthy", "Very Unhealthy", "Hazardous", "Beyond Hazardous"],
+    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a", "#bb032a"],
+    "pm2_5": {
+      "upperBounds": [12, 35.4, 55.4, 150.4, 250.4, 500.4],
+      "lowerBounds": [0, 12.1, 35.5, 55.5, 150.5, 250.5]
+    },
+    "pm10": {
+      "upperBounds": [54, 154, 254, 354, 424, 604],
+      "lowerBounds": [0, 55, 155, 255, 355, 425]
+    },
+    "no2": {
+      "upperBounds": [53, 100, 360, 649, 1249, 2049],
+      "lowerBounds": [0, 54, 101, 361, 650, 1250]
+    },
+    "o3_8h": {
+      "upperBounds": [0.054, 0.070, 0.085, 0.105, 0.200, 0.504, null],
+      "lowerBounds": [0, 0.055, 0.071, 0.086, 0.106, 0.201, null]
+    },
+    "o3_1h": {
+      "upperBounds": [null, 0.124, 0.204, 0.404, 0.604],
+      "lowerBounds": [0, null, 0.165, 0.205, 0.405]
+    },
+    "co": {
+      "upperBounds": [4.4, 9.4, 12.4, 15.4, 30.4, 50.4],
+      "lowerBounds": [0, 4.5, 9.5, 12.5, 15.5, 30.5]
+    },
+    "so2": {
+      "upperBounds": [35, 75, 185, 304, 604, 1004],
+      "lowerBounds": [0, 36, 76, 186, 305, 605]
+    }
+  }
+}
