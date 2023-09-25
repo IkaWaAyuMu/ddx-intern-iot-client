@@ -1,17 +1,18 @@
 projects:
-  FetchByInterval:
+  iot-client:
     schemaPath: app/graphql/schema.json
     includes:
-      - components/graphql/*/**.ts
+      - app/graphql/**/*.ts
     excludes:
       - ./amplify/**
     extensions:
       amplify:
         codeGenTarget: typescript
-        generatedFileName: components/graphql/API.ts
-        docsFilePath: components/graphql
+        generatedFileName: app/graphql/API.ts
+        docsFilePath: app/graphql
         region: ap-northeast-1
-        apiId: xp77dam3sngbdf7mfb7aefjmbi
+        apiId: hwgnjo3cefb6ld2gnmvilv6ddi
+        maxDepth: 5
 extensions:
   amplify:
     version: 3

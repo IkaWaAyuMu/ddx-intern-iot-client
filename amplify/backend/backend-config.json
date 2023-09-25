@@ -1,6 +1,6 @@
 {
   "auth": {
-    "iotclientae75b24b": {
+    "iotclientbe5e2aae": {
       "customAuth": false,
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
@@ -9,35 +9,67 @@
     }
   },
   "parameters": {
-    "AMPLIFY_auth_iotclientae75b24b_nativeClientId": {
+    "AMPLIFY_auth_iotclientb0976927_nativeClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "iotclientae75b24b"
+          "resourceName": "iotclientb0976927"
         }
       ]
     },
-    "AMPLIFY_auth_iotclientae75b24b_userPoolId": {
+    "AMPLIFY_auth_iotclientb0976927_userPoolId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "iotclientae75b24b"
+          "resourceName": "iotclientb0976927"
         }
       ]
     },
-    "AMPLIFY_auth_iotclientae75b24b_userPoolName": {
+    "AMPLIFY_auth_iotclientb0976927_userPoolName": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "iotclientae75b24b"
+          "resourceName": "iotclientb0976927"
         }
       ]
     },
-    "AMPLIFY_auth_iotclientae75b24b_webClientId": {
+    "AMPLIFY_auth_iotclientb0976927_webClientId": {
       "usedBy": [
         {
           "category": "auth",
-          "resourceName": "iotclientae75b24b"
+          "resourceName": "iotclientb0976927"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientbe5e2aae_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientbe5e2aae"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientbe5e2aae_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientbe5e2aae"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientbe5e2aae_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientbe5e2aae"
+        }
+      ]
+    },
+    "AMPLIFY_auth_iotclientbe5e2aae_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotclientbe5e2aae"
         }
       ]
     }
