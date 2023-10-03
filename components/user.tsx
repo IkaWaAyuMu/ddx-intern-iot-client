@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, View, Text, Modal } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-export default function User() {
+export default function User(props: {isHeader?: boolean}) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<any>(null);
   const [customState, setCustomState] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export default function User() {
     const unsubscribe = Hub.listen("auth", ({ payload: { event, data } }) => {
       switch (event) {
         case "signIn":
-          Auth.currentAuthenticatedUser()
+          Auth.currentAuthenticatedUser({bypassCache: true})
           .then((currentUser) => setUser(currentUser))
           .catch((e) => console.log(e))
           break;
@@ -28,7 +28,7 @@ export default function User() {
       }
     });
 
-    Auth.currentAuthenticatedUser()
+    Auth.currentAuthenticatedUser({bypassCache: true})
       .then((currentUser) => setUser(currentUser))
       .catch((e) => console.log(e))
       .finally(() => setIsLoading(false));
@@ -38,12 +38,12 @@ export default function User() {
 
   return (
     <>
-      <Pressable onPress={() => setShowModal(!showModal)} style={styles.userButton}>
+      <Pressable onPress={() => setShowModal(!showModal)} style={{...styles.userButton, top: (props.isHeader ? -20 : 10)}}>
         <FontAwesome name='user' size={16} color='#ffffff'/> 
       </Pressable>
       {showModal && <Modal transparent={true} visible={showModal} onRequestClose={() => setShowModal(false)} animationType="fade">
         <Pressable onPress={() => setShowModal(false)} style={styles.screen} />
-        {!isLoading && <View style={styles.userModal}>
+        {!isLoading && <View style={{...styles.userModal, top: (props.isHeader ? 90 : 50)}}>
           {user && <Text style={styles.userModalText}>{user.attributes.name}</Text>}
           {!user && <Pressable onPress={() => Auth.federatedSignIn()} style={styles.actionButton}><Text style={styles.actionButtonText}>Sign In</Text></Pressable>}
           {user && <Pressable onPress={() => Auth.signOut()} style={styles.actionButton}><Text style={styles.actionButtonText}>Sign Out</Text></Pressable>}
@@ -57,7 +57,6 @@ const styles = EStyleSheet.create({
   userButton: {
     position: 'absolute',
     overflow: 'hidden',
-    top: 10,
     right: 10,
     borderRadius: '$infinity',
     width: '2.25rem',
