@@ -1,56 +1,86 @@
 import IndoorBounds from '../assets/indoorBounds.json'
 
-export default function IndoorParamsFavor(data: params ): { level: string, color: string } {
+export default function IndoorParamsFavor(data: params ): { index:number, level: string, color: string, recommendation: string } {
 
+  if (data.pmv != null) {
+    let index = PMV(data.pmv);
+    return {
+      index,
+      level: IndoorBounds.pmv.label[index],
+      color: "#fff",
+      recommendation: IndoorBounds.pmv.recommendation[index]
+    }
+  }
   if (data.pm2_5 != null) {
     let index = PM2_5(data.pm2_5);
     return {
+      index,
       level: IndoorBounds.pm2_5.label[index],
-      color: IndoorBounds.pm2_5.color[index]
+      color: IndoorBounds.pm2_5.color[index],
+      recommendation: IndoorBounds.pm2_5.recommendation[index]
     }
   }
-  else if (data.pm10 != null) {
+  if (data.pm10 != null) {
     let index = PM10(data.pm10);
     return {
+      index,
       level: IndoorBounds.pm10.label[index],
-      color: IndoorBounds.pm10.color[index]
+      color: IndoorBounds.pm10.color[index],
+      recommendation: IndoorBounds.pm10.recommendation[index]
     }
   }
-  else if (data.hcho != null) {
+  if (data.hcho != null) {
     let index = HCHO(data.hcho);
     return {
+      index,
       level: IndoorBounds.hcho.label[index],
-      color: IndoorBounds.hcho.color[index]
+      color: IndoorBounds.hcho.color[index],
+      recommendation: IndoorBounds.hcho.recommendation[index]
     }
   }
-  else if (data.co2 != null) {
+  if (data.co2 != null) {
     let index = CO2(data.co2);
     return {
+      index,
       level: IndoorBounds.co2.label[index],
-      color: IndoorBounds.co2.color[index]
+      color: IndoorBounds.co2.color[index],
+      recommendation: IndoorBounds.co2.recommendation[index]
     }
   }
-  else if (data.tvoc != null) {
+  if (data.tvoc != null) {
     let index = TVOC(data.tvoc);
     return {
+      index,
       level: IndoorBounds.tvoc.label[index],
-      color: IndoorBounds.tvoc.color[index]
+      color: IndoorBounds.tvoc.color[index],
+      recommendation: IndoorBounds.tvoc.recommendation[index]
     }
   }
 
   return {
+    index: 0,
     level: "",
-    color: "#000"
+    color: "#000",
+    recommendation: ""
   }
 
 }
 
 type params = {
+  pmv?: number,
   pm2_5?: number,
   pm10?: number,
   hcho?: number,
   co2?: number,
   tvoc?: number,
+}
+
+function PMV(pmv:number): number{
+  for (let i=0; i < IndoorBounds.pmv.upperBounds.length; i++) {
+    if (i < IndoorBounds.pmv.upperBounds.length && pmv < IndoorBounds.pmv.upperBounds[i]) return i;
+    else if (pmv <= IndoorBounds.pmv.upperBounds[i]) return i;
+  }
+  return IndoorBounds.pmv.upperBounds.length;
 }
 
 function PM2_5(pm2_5: number): number{
