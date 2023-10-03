@@ -7,7 +7,7 @@ export default function Layout() {
         headerTransparent: true,
         headerTitleStyle: {
           color: '#fff',
-          fontFamily: 'UberMoveText-Medium'
+          fontFamily: 'UberMoveText-Regular'
         },
         headerTintColor: '#fff',
         headerTitleAlign: 'center',
