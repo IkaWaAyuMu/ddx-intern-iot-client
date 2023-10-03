@@ -160,7 +160,7 @@ function Thermal(props: { temperature?: number; humidity?: number }) {
             </LinearGradient>
             <View style={styles.itemValueDescriptionContainer}>
               <Text style={styles.itemValueDescriptionText}>
-                {"You are such a piece of shit"}
+                {"Haha"}
               </Text>
             </View>
             <Pressable style={styles.infoModalButton} onPress={() => setIsApparentTemperatureModalOpen(true)}><Feather name="info" size={15} color="#fff"/></Pressable>
@@ -199,9 +199,9 @@ function AirQuality(props: { pm2_5?: number; pm10?: number, co2?: number, tvoc?:
           <Text style={styles.itemHeaderText}>Particulate Matter</Text>
           <View style={styles.itemValueContainer}>
             {/* PM 2.5 */}
-            <Gauge headerText="PM2.5" value={pm2_5} maxValue={IndoorBounds.pm2_5.upperBounds[4]} unit="μg/m³" color={pm2_5favor.color} favorText={pm2_5favor.level}/>
+            <Gauge headerText="PM2.5" value={pm2_5} maxValue={IndoorBounds.pm2_5.upperBounds[IndoorBounds.pm2_5.upperBounds.length-1]} unit="μg/m³" color={pm2_5favor.color} favorText={pm2_5favor.level}/>
             {/* PM 10 */}
-            <Gauge headerText="PM10" value={pm10} maxValue={IndoorBounds.pm10.upperBounds[4]} unit="μg/m³" color={pm10favor.color} favorText={pm10favor.level}/>
+            <Gauge headerText="PM10" value={pm10} maxValue={IndoorBounds.pm10.upperBounds[IndoorBounds.pm10.upperBounds.length-1]} unit="μg/m³" color={pm10favor.color} favorText={pm10favor.level}/>
             <View style={styles.itemValueDescriptionContainer}>
               <Text style={styles.itemValueDescriptionText}>{"Haha"}</Text>
             </View>
@@ -212,7 +212,7 @@ function AirQuality(props: { pm2_5?: number; pm10?: number, co2?: number, tvoc?:
         <View style={styles.itemContainer}>
           <Text style={styles.itemHeaderText}>Carbon Dioxide</Text>
           <View style={styles.itemValueContainer}>
-            <Gauge headerText="CO2" value={co2} maxValue={IndoorBounds.co2.upperBounds[4]} unit="ppm" color={co2favor.color} favorText={co2favor.level}/>
+            <Gauge headerText="CO2" value={co2} maxValue={IndoorBounds.co2.upperBounds[IndoorBounds.co2.upperBounds.length-1]} unit="ppm" color={co2favor.color} favorText={co2favor.level}/>
             <View style={styles.itemValueDescriptionContainer}>
               <Text style={styles.itemValueDescriptionText}>{"Haha"}</Text>
             </View>
@@ -224,7 +224,7 @@ function AirQuality(props: { pm2_5?: number; pm10?: number, co2?: number, tvoc?:
         <View style={styles.itemContainer}>
           <Text style={styles.itemHeaderText}>Formaldehyde</Text>
           <View style={styles.itemValueContainer}>
-            <Gauge headerText="HCHO" value={hcho} maxValue={IndoorBounds.hcho.upperBounds[4]} unit="ppb" color={hchofavor.color} favorText={hchofavor.level}/>
+            <Gauge headerText="HCHO" value={hcho} maxValue={IndoorBounds.hcho.upperBounds[IndoorBounds.hcho.upperBounds.length-1]} unit="ppb" color={hchofavor.color} favorText={hchofavor.level}/>
             <View style={styles.itemValueDescriptionContainer}>
               <Text style={styles.itemValueDescriptionText}>{"Haha"}</Text>
             </View>
