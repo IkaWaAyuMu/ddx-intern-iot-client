@@ -7,6 +7,7 @@ import { API } from "aws-amplify";
 import HomeDeviceInfo from "../../components/homeDeviceInfo";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Stack } from "expo-router";
+import * as Location from 'expo-location';
 
 export default function Index() {
 
@@ -15,8 +16,29 @@ export default function Index() {
 
   const [searchText, setSearchText] = useState<string>("");
 
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert("Error", "Permission to access location was denied");
+      return Promise.resolve({
+        coords: {
+          latitude: 13.742650135428862, 
+          longitude: 100.54776750828582,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        timestamp: new Date().valueOf()
+      } as Location.LocationObject)
+    }
+    return await Location.getCurrentPositionAsync({});
+  }
+
   const fetchDevices = async () => {
     setIsDataLoading(true);
+    const location = await getLocation();
     const temp = await API.graphql({
       query:`
       query GetDevices($args: GetDevicesArgs) {
@@ -37,8 +59,8 @@ export default function Index() {
       `,
       variables: {
         args: ({
-          latitude: 13.742650135428862, 
-          longtitude: 100.54776750828582,
+          latitude: location.coords.latitude ?? 0, 
+          longitude: location.coords.longitude ?? 0        
         } as GetDevicesArgs)
       }
     });
@@ -61,14 +83,23 @@ export default function Index() {
       <View style={styles.overlayContainer}>
         <Stack.Screen
           options={{
-            headerShown: false,
+            headerShown: true,
+            title: "Air Matter",
+            headerTransparent: true,
+            headerTitleStyle: {
+              color: '#fff',
+              fontFamily: 'UberMoveText-Regular',
+            },
+            headerTintColor: '#fff',
+            headerTitleAlign: 'center',
+            headerRight: () => (<User isHeader/>)
           }}
         />
-        <ImageBackground source={require("../../assets/images/background.webp")} style={styles.container}>
+        <ImageBackground source={require("../../assets/images/background.jpg")} style={styles.container}>
           <View style={styles.containerImageOverlay} />
           <View style={styles.flatListContainer}>
             <View style={styles.searchBox}>
-              <FontAwesome name='search' size={16} color='#727272'/> 
+              <FontAwesome name='search' size={16} color='#fff'/> 
               <TextInput
                 style={styles.searchText}
                 onChangeText={setSearchText}
@@ -82,10 +113,11 @@ export default function Index() {
               data={devices ? devices.filter(e => e.name!.toLowerCase().includes(searchText.toLowerCase())).sort((a, b) => (a.name!.toLowerCase().startsWith(searchText.toLowerCase()) ? 1 : -1) - (b.name!.toLowerCase().startsWith(searchText.toLowerCase()) ? 1 : -1)) : []}
               renderItem={({item}) => <DeviceElement device={item}/>}
               keyExtractor={item => item.uid!}
+              ItemSeparatorComponent={() => <View style={{height: 8}} />}
             />
+            <View style={{height: 8}} />
           </View>
         </ImageBackground>
-        <User />
       </View>
   )
 }
@@ -118,7 +150,7 @@ const styles = EStyleSheet.create({
     backgroundColor: '$gray600',
     paddingVertical: '0.5rem',
     paddingHorizontal: '1rem',
-    borderRadius: '$infinity',
+    borderRadius: '0.75rem',
     flexDirection: 'row',
     alignItems: 'center',
     gap: '1rem'
@@ -136,44 +168,45 @@ const styles = EStyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: '3.75rem',
+    paddingTop: '5rem',
     alignItems: 'stretch',
     justifyContent: 'center',
-    gap: '1rem',
   },
   containerImageOverlay: {
     ...EStyleSheet.absoluteFillObject,
-    backgroundColor: '$black_overlay',
+    backgroundColor: '$black_lighter_overlay',
   },
   flatListContainer: {
-    padding: '1rem',
+    paddingHorizontal: '1rem',
+    paddingTop: '1.5rem',
     flex: 1,
-    gap: '1rem',
+    gap: '0.5rem',
   },
 });
 
 const deviceStyle = EStyleSheet.create({
   container: {
-    borderRadius: '1.25rem',
+    borderRadius: '0.75rem',
     overflow: 'hidden',
-    paddingVertical: '0.75rem',
+    paddingVertical: '1.5rem',
     paddingHorizontal: '1rem',
     gap: '2rem',
     justifyContent: 'space-between',
   },
   containerImageOverlay: {
     ...EStyleSheet.absoluteFillObject,
-    backgroundColor: '$black_lighter_overlay',
+    backgroundColor: '$black_overlay',
   },
   topContainer: {
     flexDirection: 'row',
     height: '3.125rem',
   },
   nameText: {
-    fontFamily: 'UberMoveText-Medium',
+    fontFamily: 'UberMoveText-Light',
     fontSize: '1.25rem',
     color: '$white',
     flex: 1,
+    paddingRight: '3rem',
   },
   bottomContainer: {
     flexDirection: 'row',
