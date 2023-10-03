@@ -1,5 +1,6 @@
 import Feather from "@expo/vector-icons/Feather";
-import { Modal, Pressable, Text, View, Image, ImageSourcePropType } from "react-native";
+import { useState } from "react";
+import { Modal, Pressable, Text, View, Image, ImageSourcePropType, ScrollView } from "react-native";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 export default function InfoModal(props: {
@@ -9,7 +10,10 @@ export default function InfoModal(props: {
 }) {
   const { info, isOpen, closeCallback } = props;
 
+  const [isLargeModalOpen, setIsLargeModalOpen] = useState<boolean>(false);
+
   return (
+    <>
       <Modal transparent={true} visible={isOpen} onRequestClose={closeCallback} animationType="fade">
         <Pressable style={styles.screen} onPress={closeCallback}></Pressable>
         <View style={styles.modalContainer}>
@@ -18,12 +22,23 @@ export default function InfoModal(props: {
             <View style={styles.textContainer}>
               <Text style={{ ...styles.modalText, ...styles.modalHeaderText }}>{info.topic}</Text>
               <Text style={{ ...styles.modalText, ...styles.modalDescriptionText }}>{info.short}</Text>
-              <Pressable><Text style={{ ...styles.modalText, ...styles.seeMoreText }}>See more -{">"}</Text></Pressable>
+              <Pressable onPress={() => setIsLargeModalOpen(true)}><Text style={{ ...styles.modalText, ...styles.seeMoreText }}>See more -{">"}</Text></Pressable>
             </View>
-            <Pressable style={styles.closeButton} onPress={closeCallback}><Feather name="x" size={16} color="#fff"/></Pressable>
+            <Pressable style={styles.closeButton} onPress={closeCallback}><Feather name="x" size={24} color="#fff"/></Pressable>
           </View>
         </View>
       </Modal>
+      <Modal transparent={true} visible={isLargeModalOpen} onRequestClose={() => setIsLargeModalOpen(false)} animationType="slide">
+        <View style={styles.largeModalContainer}>
+            {info.image && <Image style={styles.imageContainer} source={info.image}/>}
+            <ScrollView contentContainerStyle={styles.textContainer}>
+              <Text style={{ ...styles.modalText, ...styles.modalHeaderText }}>{info.topic}</Text>
+              <Text style={{ ...styles.modalText, ...styles.modalDescriptionText }}>{info.long}</Text>
+            </ScrollView>
+            <Pressable style={styles.closeButton} onPress={() => setIsLargeModalOpen(false)}><Feather name="x" size={24} color="#fff"/></Pressable>
+        </View>
+      </Modal>
+    </>
   );
 }
 
@@ -38,7 +53,7 @@ const styles = EStyleSheet.create({
     overflow: "hidden",
     borderRadius: "0.75rem",
     marginHorizontal: "1rem",
-    backgroundColor: "$gray600",
+    backgroundColor: "$gray800",
   },
   imageContainer: {
     height: "8.25rem"
@@ -75,4 +90,9 @@ const styles = EStyleSheet.create({
     flex: 1,
     backgroundColor: "$black_overlay",
   },
+  largeModalContainer: {
+    ...EStyleSheet.absoluteFillObject,
+    flex: 1,
+    backgroundColor: "$gray800",
+  }
 });
