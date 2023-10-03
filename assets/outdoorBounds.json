@@ -3,7 +3,7 @@
     "upperBounds": [50, 100, 150, 200, 300, 400, 500],
     "lowerBounds": [0, 51, 101, 151, 201, 301, 401],
     "label": ["Good", "Moderate", "Unhealthy for Sensitive Groups", "Unhealthy", "Very Unhealthy", "Hazardous", "Beyond Hazardous"],
-    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a", "#bb032a"],
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#c72e5c", "#c72e5c"],
     "pm2_5": {
       "upperBounds": [12, 35.4, 55.4, 150.4, 250.4, 500.4],
       "lowerBounds": [0, 12.1, 35.5, 55.5, 150.5, 250.5]

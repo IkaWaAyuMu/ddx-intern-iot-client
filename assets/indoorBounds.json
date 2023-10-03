@@ -1,27 +1,95 @@
 {
   "pm2_5": {
-    "label": ["Very Good", "Good", "Medium", "Slightly Poor", "Moderate", "Unhealthy for Sensitive Groups"],
-    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
-    "upperBounds": [10, 12, 15, 35.4, 55.5]
+    "unit": "µg/m³",
+    "unitFull": "micrograms per cubic meter",
+    "label": ["Very Good", "Good", "Medium", "Moderate", "Unhealthy for Sensitive Groups", "Unhealthy"],
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#f83446"],
+    "upperBounds": [10, 12, 15, 35.4, 55.5],
+    "recommendation": [
+      "Ideal air quality, maintain good ventilation and regular cleaning practices to ensure air quality stays within this range.",
+      "Still in good quality, but consider taking extra measures to reduce PM2.5 levels further. Ensure proper ventilation and use air purifiers if necessary, especially if individuals with respiratory conditions are present.",
+      "Still in good quality, but focus on improving ventilation more, reducing indoor sources of pollution (e.g., smoking, cooking emissions) and consider using air purifiers with HEPA filters.",
+      "The air may start to impact the health of sensitive individuals. Increase ventilation, limit the use of products that release indoor pollutants (e.g., aerosol sprays), and use air purifiers with HEPA filters to maintain cleaner air.",
+      "The air is of concern, especially for individuals with respiratory or cardiovascular conditions. Take immediate steps to improve indoor air quality, including enhancing ventilation, minimizing indoor sources of pollution, and using high-quality air purifiers with HEPA filters. Consider wearing masks indoors if air quality remains poor.",
+      "Air quality is considered unhealthy, and everyone should take precautions. Implement measures such as avoiding strenuous activities, using air purifiers, and wearing masks when indoors. Identify and eliminate sources of indoor pollution."
+    ]
   },
   "pm10": {
-    "label": ["Very Good", "Good", "Medium", "Slightly Poor", "Moderate", "Unhealthy for Sensitive Groups"],
-    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
-    "upperBounds": [20, 30, 50, 154, 254]
+    "unit": "µg/m³",
+    "unitFull": "micrograms per cubic meter",
+    "label": ["Very Good", "Good", "Medium", "Moderate", "Unhealthy for Sensitive Groups", "Unhealthy"],
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#f83446"],
+    "upperBounds": [20, 30, 50, 154, 254],
+    "recommendation": [
+      "Ideal air quality, maintain good ventilation and regular cleaning practices to ensure air quality stays within this range.",
+      "Still in good quality, but consider taking extra measures to reduce PM10 levels further. Ensure proper ventilation and use air purifiers if necessary, especially if individuals with respiratory conditions are present.",
+      "Still in good quality, but focus on improving ventilation more, reducing indoor sources of pollution (e.g., smoking, cooking emissions) and consider using air purifiers with HEPA filters.",
+      "The air may start to impact the health of sensitive individuals. Increase ventilation, limit the use of products that release indoor pollutants (e.g., aerosol sprays), and use air purifiers with HEPA filters to maintain cleaner air.",
+      "Air quality is of concern, especially for individuals with respiratory or cardiovascular conditions. Take immediate steps to improve indoor air quality, including enhancing ventilation, minimizing indoor sources of pollution, and using high-quality air purifiers with HEPA filters. Consider wearing masks indoors if air quality remains poor.",
+      "Air quality is considered unhealthy, and everyone should take precautions. Implement measures such as avoiding strenuous activities, using air purifiers, and wearing masks when indoors. Identify and eliminate sources of indoor pollution."
+    ]
   },
   "hcho": {
+    "unit": "ppb",
+    "unitFull": "parts per billion",
     "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
-    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
-    "upperBounds": [0.05, 0.1, 0.25, 0.3, 0.5]
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#f83446"],
+    "upperBounds": [0.05, 0.1, 0.25, 0.3, 0.5],
+    "recommendation": [
+      "Ideally, indoor formaldehyde levels should be as close to zero as possible. This indicates a minimal risk to health. Ensure good ventilation and reduce potential indoor sources of formaldehyde.",
+      "Generally safe for most individuals. However, if sensitive individuals or children are present, consider improving ventilation and reducing potential formaldehyde sources.",
+      "Formaldehyde is in acceptable limits for most people, but may be of concern for those with chemical sensitivities or respiratory conditions. Increase ventilation and take steps to reduce formaldehyde emissions, such as avoiding the use of certain products like pressed wood furniture or certain paints.",
+      "THe air may start to cause health concerns for sensitive individuals. Take immediate action to reduce indoor formaldehyde levels. Improve ventilation, identify and eliminate sources of formaldehyde, and consider using air purifiers with activated carbon filters.",
+      "Indoor formaldehyde can pose health risks, especially for individuals with respiratory conditions or chemical sensitivities. Implement strict measures to reduce formaldehyde exposure, including eliminating or sealing off formaldehyde-emitting products, enhancing ventilation, and using air purifiers with activated carbon filters.",
+      "Indoor formaldehyde are considered unhealthy and should be addressed urgently. Take immediate steps to identify and eliminate sources of formaldehyde in the indoor environment. Ventilate the space thoroughly, and consider wearing masks if necessary, especially for sensitive individuals."
+    ]
   },
   "co2": {
+    "unit": "ppm",
+    "unitFull": "parts per million",
     "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
-    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
-    "upperBounds": [750, 900, 1200, 2500, 5000]
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#f83446"],
+    "upperBounds": [750, 900, 1200, 2500, 5000],
+    "recommendation": [
+      "Ideal, excellent ventilation and fresh air circulation.",
+      "Still in good quality, suggests that the space could benefit from improved ventilation. Ensure that there is adequate airflow, and consider opening windows or using exhaust fans to bring in fresh outdoor air.",
+      "Still in good quality, but ventilation need improvement. Increase ventilation by opening windows, using fans, or adjusting HVAC settings to ensure better air exchange.",
+      "The air starting to degrade, and occupants may experience discomfort, especially in poorly ventilated areas. Implement measures to enhance ventilation, such as opening windows, using exhaust fans, or adjusting HVAC systems to increase fresh air intake.",
+      "Poor indoor air quality and can lead to discomfort, drowsiness, and reduced cognitive function. Immediate action is necessary to improve ventilation. Open windows and doors, increase airflow, and consider using mechanical ventilation systems to exchange indoor air with fresh outdoor air.",
+      "The air have significant concern and pose health risks. At this level, occupants may experience headaches, dizziness, and impaired cognitive function. Take immediate steps to address the issue by increasing ventilation and ensuring a constant supply of fresh air. If the source of high CO2 levels cannot be easily identified or remedied, consider evacuating the area."
+    ]
   },
   "tvoc": {
+    "unit": "ppb",
+    "unitFull": "parts per billion",
     "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
-    "color": ["#7fd99a", "#f6bc2f", "#fc823a", "#fcf7f9", "#c490f9", "#bb032a"],
-    "upperBounds": [200, 500, 1000, 2000, 3000]
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#f83446"],
+    "upperBounds": [200, 500, 1000, 2000, 3000],
+    "recommendation": [
+      "Ideally, no immediate action is needed.",
+      "Low and generally safe for most individuals. However, if you have sensitive individuals or individuals with chemical sensitivities in the indoor space, you may want to take steps to reduce TVOC levels. This can include using low-VOC or VOC-free products, improving ventilation, and ensuring proper cleaning practices.",
+      "Acceptiable, but may be of concern for individuals with respiratory conditions or chemical sensitivities. Consider using air purifiers with activated carbon filters, increasing ventilation, and choosing low-VOC products to reduce emissions.",
+      "The air may start to cause discomfort and health concerns, especially for sensitive individuals. Identify and eliminate sources of TVOC emissions in your indoor environment. Ventilate the space thoroughly and use air purifiers with activated carbon filters to reduce TVOC levels.",
+      "The air can lead to adverse health effects for occupants. Act promptly to reduce TVOC levels. Identify and remove or isolate sources of emissions, enhance ventilation, and use air purifiers with activated carbon filters to filter the air.",
+      "The air have a significant concern and poses health risks. Immediate action is necessary to improve indoor air quality. Identify and eliminate sources of TVOC emissions, open windows and doors for increased ventilation, and use high-efficiency air purifiers with activated carbon filters to remove VOCs from the air."
+    ]
+  },
+  "pmv": {
+    "unit": null,
+    "label": ["Cold", "Cool", "Slightly cool", "Comfort", "Good", "Very good", "Good", "Comfort", "Slightly warm", "Warm", "Hot"],
+    "upperBounds": [-1.5, -1, -0.7, -0.5, -0.2, 0.2, 0.5, 0.7, 1, 1.5],
+    "recommendation": [
+      "The indoor environment is excessively cold. It is recommended to increase the indoor temperature significantly, utilize efficient heating systems, and wear warm clothing like sweaters, thermal layers, and blankets to enhance comfort.",
+      "The indoor conditions are quite cold. Adjust the thermostat to raise the temperature slightly. Additionally, wearing thermal clothing such as long-sleeved shirts and light jackets can help maintain comfort in this chilly environment.",
+      "Indoor conditions are slightly cold. It is advisable to adjust the thermostat to a warmer setting. Wearing long-sleeved shirts, light sweaters, and thin jackets can enhance comfort by providing additional insulation.",
+      "The indoor environment is a bit cool. Modestly adjust the thermostat for a slightly warmer atmosphere. Wearing long-sleeved shirts or blouses with lightweight sweaters can provide the necessary warmth for improved comfort.",
+      "Indoor conditions are marginally cool. Maintain the current temperature settings, and wearing long-sleeved shirts or blouses with light layers can ensure comfort without the need for significant changes.",
+      "The indoor environment is within the comfortable range for most people. No adjustments to the temperature are necessary. Wear standard indoor clothing like short-sleeved shirts, lightweight tops, and casual pants for optimal comfort.",
+      "The indoor conditions are slightly warm. Adjust the air conditioning to a slightly cooler setting, and wear light, breathable fabrics like short-sleeved shirts, dresses, and shorts to stay comfortable.",
+      "Indoor conditions are becoming warm. Lower the air conditioning settings to create a cooler atmosphere. Wearing short-sleeved shirts, skirts, or lightweight dresses can help maintain comfort in this mildly warm environment.",
+      "The indoor environment is noticeably warm. Lower the air conditioning to a more comfortable level, and wear light and breathable fabrics like short-sleeved tops and skirts or shorts to enhance comfort.",
+      "Indoor conditions are quite warm. Lower the air conditioning significantly, and wear very light and breathable clothing such as sleeveless tops, shorts, or summer dresses to ensure comfort in this warmer environment.",
+      "The indoor environment is excessively warm. Urgently lower the air conditioning to create a cooler space. Opt for minimal clothing like tank tops, shorts, or summer dresses to combat the heat and maintain comfort."
+    ]
   }
 }
