@@ -4,7 +4,7 @@
 
 export type GetDevicesArgs = {
   latitude: number,
-  longtitude: number,
+  longitude: number,
 };
 
 export type GetDevicesMessage = {
@@ -25,7 +25,7 @@ export type Device = {
 
 export type GetDevicesFromUIDsArgs = {
   latitude: number,
-  longtitude: number,
+  longitude: number,
   uids: Array< string >,
 };
 
@@ -35,6 +35,7 @@ export type GetDataArgs = {
   deveui?: string | null,
   range: TimeRangeArgs,
   frequency?: string | null,
+  id?: string | null,
 };
 
 export type TimeRangeArgs = {
@@ -95,6 +96,30 @@ export type DownsampledAM319Data = {
   pressure?: Array< number | null > | null,
   pm10?: Array< number | null > | null,
   hcho?: Array< number | null > | null,
+};
+
+export type DownsampledMSD18Message = {
+  __typename: "DownsampledMSD18Message",
+  statusCode: number,
+  NextToken?: string | null,
+  result?:  Array<DownsampledMSD18Data | null > | null,
+  error?: string | null,
+};
+
+export type DownsampledMSD18Data = {
+  __typename: "DownsampledMSD18Data",
+  NextToken?: string | null,
+  id: string,
+  brand: string,
+  model: string,
+  time: Array< number | null >,
+  timestamp: Array< string | null >,
+  pm2_5?: Array< number | null > | null,
+  humidity?: Array< number | null > | null,
+  co2?: Array< number | null > | null,
+  tvoc?: Array< number | null > | null,
+  temperature?: Array< number | null > | null,
+  pm10?: Array< number | null > | null,
 };
 
 export type GetDevicesQueryVariables = {
@@ -205,4 +230,32 @@ export type TestQueryVariables = {
 
 export type TestQuery = {
   test?: string | null,
+};
+
+export type GetDownsampledMSD18DataQueryVariables = {
+  args?: GetDataArgs | null,
+};
+
+export type GetDownsampledMSD18DataQuery = {
+  getDownsampledMSD18Data?:  {
+    __typename: "DownsampledMSD18Message",
+    statusCode: number,
+    NextToken?: string | null,
+    result?:  Array< {
+      __typename: "DownsampledMSD18Data",
+      NextToken?: string | null,
+      id: string,
+      brand: string,
+      model: string,
+      time: Array< number | null >,
+      timestamp: Array< string | null >,
+      pm2_5?: Array< number | null > | null,
+      humidity?: Array< number | null > | null,
+      co2?: Array< number | null > | null,
+      tvoc?: Array< number | null > | null,
+      temperature?: Array< number | null > | null,
+      pm10?: Array< number | null > | null,
+    } | null > | null,
+    error?: string | null,
+  } | null,
 };

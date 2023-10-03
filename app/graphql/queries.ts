@@ -97,3 +97,28 @@ export const test = /* GraphQL */ `
     test(args: $args)
   }
 `;
+export const getDownsampledMSD18Data = /* GraphQL */ `
+  query GetDownsampledMSD18Data($args: GetDataArgs) {
+    getDownsampledMSD18Data(args: $args) {
+      statusCode
+      NextToken
+      result {
+        NextToken
+        id
+        brand
+        model
+        time
+        timestamp
+        pm2_5
+        humidity
+        co2
+        tvoc
+        temperature
+        pm10
+        __typename
+      }
+      error
+      __typename
+    }
+  }
+`;
