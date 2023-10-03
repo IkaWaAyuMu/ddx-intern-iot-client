@@ -1,7 +1,7 @@
 import { Auth, Hub } from 'aws-amplify';
-import { Slot, Stack } from 'expo-router';
+import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { Text, ImageBackground } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import User from '../../components/user';
 
@@ -37,10 +37,10 @@ export default function Layout() {
   if (isLoading) return null;
 
   if (!user) return (
-    <View style={styles.container}>
-      <User />
-      <Text>Yang mai dai log in ai sus</Text>
-    </View>
+    <ImageBackground source={require("../../assets/images/landing.jpg")} style={styles.container}>
+      <Text style={styles.landingText}>Please log in</Text>
+      <User/>
+    </ImageBackground>
   );
 
   return <Stack screenOptions={{headerShown: false}}/>;
@@ -52,4 +52,9 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  landingText: {
+    fontFamily: 'UberMove-Bold',
+    fontSize: 40,
+    color: '#40ff40',
+  }
 });
