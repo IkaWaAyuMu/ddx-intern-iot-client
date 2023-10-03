@@ -113,3 +113,5 @@ export default function CalculatePMV(ta: number, tr: number, vel: number, rh: nu
     hl6: hl6,
   };
 };
+
+export const calculatePMVBasic = (temperature: number, humidity:number) => CalculatePMV(temperature, temperature, 0, humidity, 1.2, 0.61)
