@@ -10,6 +10,8 @@ import { Stack } from 'expo-router';
 import { setStatusBarTranslucent } from "expo-status-bar";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import 'react-native-gesture-handler';
+
 const isLocalHost = Boolean(__DEV__);
 const [productionRedirectSignIn, localRedirectSignIn] = awsconfig.oauth.redirectSignIn.split(",");
 const [productionRedirectSignOut, localRedirectSignOut] = awsconfig.oauth.redirectSignOut.split(",");
@@ -43,6 +45,8 @@ EStyleSheet.build({
   $infinity: '999rem',
 
   $black: '#000',
+  $black_80: '#000000cc',
+  $black_50: '#00000080',
   $black_20: '#00000033',
   $gray900: '#282828',
   $gray800: '#4b4b4b',
@@ -59,12 +63,12 @@ EStyleSheet.build({
   $black_overlay: '#000000bf',
   $black_lighter_overlay: '#00000040',
 
-  $aqi_1_good: '#7fd99a',
-  $aqi_2_moderate: '#f6bc2f',
-  $aqi_3_sensitive: '#fc823a',
-  $aqi_4_unhealthy: '#fcf7f9',
-  $aqi_5_very_unhealthy: '#c490f9',
-  $aqi_6_hazardous: '#bb032a',
+  $aqi_1_good: '#00ff19',
+  $aqi_2_moderate: '#ffd600',
+  $aqi_3_sensitive: '#ff8b1e',
+  $aqi_4_unhealthy: '#fe2222',
+  $aqi_5_very_unhealthy: '#d53fff',
+  $aqi_6_hazardous: '#c72e5c',
 });
 
 export default function Root() {
@@ -75,6 +79,7 @@ export default function Root() {
     'UberMove-Bold': require('../assets/fonts/UberMoveBold.otf'),
     'UberMoveMono-Medium': require('../assets/fonts/UberMoveMono-Medium.ttf'),
     'UberMoveText-Light': require('../assets/fonts/UberMoveTextLight.otf'),
+    'UberMoveText-Regular': require('../assets/fonts/UberMoveTextRegular.otf'),
     'UberMoveText-Medium': require('../assets/fonts/UberMoveTextMedium.otf'),
   });
 
