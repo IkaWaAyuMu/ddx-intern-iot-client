@@ -8,13 +8,15 @@ export default function Graph24h(props: {
   time?: (number | null)[], 
   y?: ((number | null)[] | null | undefined)[],
   name?: (string | null)[]
+  unit?: string,
   startFromZero?: boolean,
   decimalPoints?: number,
-  decimalPointsOnAxis?: number,
   sectionCount?: number,
 }) {
-  const { time, y, startFromZero, decimalPoints, decimalPointsOnAxis, sectionCount } = props;
+  const { time, y, name, unit, startFromZero, decimalPoints, sectionCount } = props;
   var [containerWidth, setContainerWidth] = useState(0);
+
+  
 
   const minValue = 
     (!startFromZero && y) ? 
@@ -46,6 +48,7 @@ export default function Graph24h(props: {
     }}
     onLayout={(e) => {setContainerWidth(e.nativeEvent.layout.width)}}
   >
+    {unit && <Text style={styles.unitText}>{unit}</Text>}
     <LineChart 
       data={(y && y[0]) ? generateData(time, y[0], containerWidth) : undefined}
       data2={(y && y[1]) ? generateData(time, y[1], containerWidth) : undefined}
@@ -53,12 +56,12 @@ export default function Graph24h(props: {
       data4={(y && y[3]) ? generateData(time, y[3], containerWidth) : undefined}
       data5={(y && y[4]) ? generateData(time, y[4], containerWidth) : undefined}
 
-      showFractionalValues={(decimalPointsOnAxis ?? decimalPoints ?? 0) > 0}
-      roundToDigits={decimalPointsOnAxis ?? decimalPoints ?? 0}
+      showFractionalValues={(decimalPoints ?? 0) > 0}
+      roundToDigits={decimalPoints ?? 0}
 
-      mostNegativeValue ={startFromZero ? undefined : (minValue < 0 ? Math.floor(minValue - (Math.abs(maxValue-minValue) * 0.1)) : undefined)}
-      yAxisOffset={startFromZero ? undefined : (minValue > 0 ? Math.floor(minValue - (Math.abs(maxValue-minValue) * 0.1)) : undefined)}
-      maxValue={Math.ceil(maxValue + (Math.abs(maxValue-minValue) * 0.1)) - (startFromZero ? 0 : (minValue > 0 ? Math.ceil(minValue - (Math.abs(maxValue-minValue) * 0.1)) : 0))}
+      mostNegativeValue ={startFromZero ? undefined : (minValue < 0 ? Math.floor((minValue - (Math.abs(maxValue-minValue) * 0.1)) * Math.pow(10, decimalPoints ?? 0)) / Math.pow(10, decimalPoints ?? 0) : undefined)}
+      yAxisOffset={startFromZero ? undefined : (minValue > 0 ? Math.floor((minValue - (Math.abs(maxValue-minValue) * 0.1)) * Math.pow(10, decimalPoints ?? 0)) / Math.pow(10, decimalPoints ?? 0) : undefined)}
+      maxValue={(Math.ceil((maxValue + (Math.abs(maxValue-minValue) * 0.1)) * Math.pow(10, decimalPoints ?? 0)) / Math.pow(10, decimalPoints ?? 0)) - (startFromZero ? 0 : (minValue > 0 ? Math.floor((minValue - (Math.abs(maxValue-minValue) * 0.1)) * Math.pow(10, decimalPoints ?? 0)) / Math.pow(10, decimalPoints ?? 0) : 0))}
       noOfSections={sectionCount ?? 5}
       noOfSectionsBelowXAxis={(startFromZero ? false : (minValue < 0 ? true : false)) ? sectionCount ?? 5 : undefined }
 
@@ -84,6 +87,7 @@ export default function Graph24h(props: {
 
       height={128/(startFromZero ? 1 : (minValue < 0 ? 2 : 1))}
       
+      width={containerWidth}
       initialSpacing={0}
       spacing={(containerWidth-32)/50}
       endSpacing={0}
@@ -153,6 +157,14 @@ function generateData(
   }
 
 const styles = EStyleSheet.create({
+  unitText: {
+    width: "4.5rem",
+    textAlign: "center",
+    paddingBottom: "0.25rem",
+    fontFamily: "UberMoveText-Light",
+    fontSize: "0.75rem",
+    color: "$white",
+  },
   nameColor: {
     height: "0.5rem",
     width: "0.5rem",

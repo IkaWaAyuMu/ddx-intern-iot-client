@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Link, Stack, useLocalSearchParams } from "expo-router";
 import { useHeaderHeight } from "@react-navigation/elements";
 import {
   ImageBackground,
@@ -27,7 +27,7 @@ import PMInfo from "../../../../../assets/information/pm.json";
 import CO2Info from "../../../../../assets/information/co2.json";
 import TVOCInfo from "../../../../../assets/information/tvoc.json";
 
-import IndoorBounds from "../../../../../assets/indoorBounds.json";
+import IndoorBounds from "../../../../../assets/bounds/indoorBounds.json";
 import IndoorParamsFavor from "../../../../../components/indoorParamsFavor";
 import { DownsampledMSD18Data } from "../../../../graphql/API";
 import { QueryAll } from "../../../../graphql/customQueries";
@@ -129,9 +129,11 @@ export default function Page() {
         options={{
           title: name?.toString(),
           headerRight: () => (
-            <Pressable>
-              <Text style={styles.headerRightText}>More</Text>
-            </Pressable>
+            <Link href={`/MSD18/${id!}/historic?image=${image}&name=${name}`} asChild>
+              <Pressable>
+                <Text style={styles.headerRightText}>More</Text>
+              </Pressable>
+            </Link>
           ),
         }}
       />
@@ -603,16 +605,11 @@ function Data24h(props: { data24h: Partial<DownsampledMSD18Data> | null }) {
                   .slice(-49),
               ]}
               name={["Temperature", "Apparent Temperature"]}
-              decimalPoints={2}
-              decimalPointsOnAxis={0}
+              unit={"°C"}
+              decimalPoints={0}
             />
           )}
         </View>
-        <Text
-          style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
-        >
-          Unit: degree Celsius
-        </Text>
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.itemHeaderText2}>{HumidityInfo.topic}</Text>
@@ -621,16 +618,11 @@ function Data24h(props: { data24h: Partial<DownsampledMSD18Data> | null }) {
             <Graph24h
               time={timemillis}
               y={[humidity?.slice(-49)]}
+              unit={"%"}
               decimalPoints={0}
-              decimalPointsOnAxis={0}
             />
           )}
         </View>
-        <Text
-          style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
-        >
-          Unit: percent
-        </Text>
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.itemHeaderText2}>Predicted Mean Vote</Text>
@@ -643,8 +635,7 @@ function Data24h(props: { data24h: Partial<DownsampledMSD18Data> | null }) {
                   ?.map((e, i) => calculatePMVBasic(e!, humidity![i]!).pmv)
                   .slice(-49),
               ]}
-              decimalPoints={2}
-              decimalPointsOnAxis={0}
+              decimalPoints={1}
               sectionCount={3}
             />
           )}
@@ -658,43 +649,28 @@ function Data24h(props: { data24h: Partial<DownsampledMSD18Data> | null }) {
               time={timemillis}
               y={[pm2_5?.slice(-49), pm10?.slice(-49)]}
               name={["PM2.5", "PM10"]}
+              unit={IndoorBounds.pm2_5.unit}
               startFromZero
-              decimalPoints={2}
-              decimalPointsOnAxis={0}
+              decimalPoints={0}
             />
           )}
         </View>
-        <Text
-          style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
-        >
-          Unit: {IndoorBounds.pm2_5.unitFull}
-        </Text>
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.itemHeaderText2}>{CO2Info.topic}</Text>
         <View style={styles.itemValueContainer}>
           {props.data24h && (
-            <Graph24h time={timemillis} y={[co2?.slice(-49)]} startFromZero />
+            <Graph24h time={timemillis} y={[co2?.slice(-49)]} unit={IndoorBounds.co2.unit} startFromZero />
           )}
         </View>
-        <Text
-          style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
-        >
-          Unit: {IndoorBounds.co2.unitFull}
-        </Text>
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.itemHeaderText2}>{TVOCInfo.topic}</Text>
         <View style={styles.itemValueContainer}>
           {props.data24h && (
-            <Graph24h time={timemillis} y={[tvoc?.slice(-49)]} startFromZero />
+            <Graph24h time={timemillis} y={[tvoc?.slice(-49)]} unit={IndoorBounds.tvoc.unit} startFromZero decimalPoints={1}/>
           )}
         </View>
-        <Text
-          style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
-        >
-          Unit: {IndoorBounds.tvoc.unitFull}
-        </Text>
       </View>
     </View>
   );
