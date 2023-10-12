@@ -76,6 +76,7 @@
   },
   "pmv": {
     "unit": null,
+    "unitFull": null,
     "label": ["Cold", "Cool", "Slightly cool", "Comfort", "Good", "Very good", "Good", "Comfort", "Slightly warm", "Warm", "Hot"],
     "upperBounds": [-1.5, -1, -0.7, -0.5, -0.2, 0.2, 0.5, 0.7, 1, 1.5],
     "recommendation": [
