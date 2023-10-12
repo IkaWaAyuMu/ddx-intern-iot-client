@@ -1,4 +1,4 @@
-import IndoorBounds from '../assets/indoorBounds.json'
+import IndoorBounds from '../assets/bounds/indoorBounds.json'
 
 export default function IndoorParamsFavor(data: params ): { index:number, level: string, color: string, recommendation: string } {
 

@@ -1,4 +1,4 @@
-import ParamsBounds from "../assets/outdoorBounds.json"
+import ParamsBounds from "../assets/bounds/outdoorBounds.json"
 
 export default function CalculateAQI(data: AQICalculateableData ): { aqi: number, level: string, color: string } {
 
