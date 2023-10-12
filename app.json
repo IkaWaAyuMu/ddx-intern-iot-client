@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "iot-client",
+    "name": "Air Matter",
     "slug": "iot-client",
     "scheme": "com.chayanon.iotclient",
     "version": "1.0.0",
@@ -16,7 +16,8 @@
     ],
     "jsEngine": "hermes",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chayanon.iotclient"
     },
     "android": {
       "adaptiveIcon": {
