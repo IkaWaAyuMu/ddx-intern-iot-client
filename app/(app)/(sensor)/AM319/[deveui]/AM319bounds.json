@@ -1,0 +1,17 @@
+{
+  "tvoc": {
+    "unit": "index",
+    "unitFull": "index",
+    "label": ["Very Good", "Good", "Medium", "Poor", "Bad", "Very Bad"],
+    "color": ["#00ff19", "#ffd600", "#ff8b1e", "#fe2222", "#d53fff", "#f83446"],
+    "upperBounds": [2, 2.75, 3.50, 4.25, 5],
+    "recommendation": [
+      "Ideally, no immediate action is needed.",
+      "Low and generally safe for most individuals. However, if you have sensitive individuals or individuals with chemical sensitivities in the indoor space, you may want to take steps to reduce TVOC levels. This can include using low-VOC or VOC-free products, improving ventilation, and ensuring proper cleaning practices.",
+      "Acceptiable, but may be of concern for individuals with respiratory conditions or chemical sensitivities. Consider using air purifiers with activated carbon filters, increasing ventilation, and choosing low-VOC products to reduce emissions.",
+      "The air may start to cause discomfort and health concerns, especially for sensitive individuals. Identify and eliminate sources of TVOC emissions in your indoor environment. Ventilate the space thoroughly and use air purifiers with activated carbon filters to reduce TVOC levels.",
+      "The air can lead to adverse health effects for occupants. Act promptly to reduce TVOC levels. Identify and remove or isolate sources of emissions, enhance ventilation, and use air purifiers with activated carbon filters to filter the air.",
+      "The air have a significant concern and poses health risks. Immediate action is necessary to improve indoor air quality. Identify and eliminate sources of TVOC emissions, open windows and doors for increased ventilation, and use high-efficiency air purifiers with activated carbon filters to remove VOCs from the air."
+    ]
+  }
+}
