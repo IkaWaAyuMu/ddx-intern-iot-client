@@ -554,7 +554,7 @@ function AirQuality(props: {
           <View style={styles.itemValueContainer}>
             <Gauge headerText="HCHO" value={hcho} maxValue={IndoorBounds.hcho.upperBounds[IndoorBounds.hcho.upperBounds.length-1]} unit="ppb" color={hchofavor.color} favorText={hchofavor.level}/>
             <View style={styles.itemValueDescriptionContainer}>
-              <Text style={styles.itemValueDescriptionText}>{"Haha"}</Text>
+              <Text style={styles.itemValueDescriptionText}>{hchofavor.recommendation}</Text>
             </View>
           </View>
           <Pressable style={styles.infoModalButton} onPress={() => setIsHCHOModalOpen(true)}><Feather name="info" size={15} color="#fff"/></Pressable>
