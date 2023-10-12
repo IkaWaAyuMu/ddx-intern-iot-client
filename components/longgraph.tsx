@@ -83,19 +83,19 @@ export function LongGraph(props: {
           //@ts-ignore
           data={chartData}
           showReferenceLine1
-          referenceLine1Position={meanValue - (props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : 0)}
+          referenceLine1Position={meanValue}
           //@ts-ignore
           referenceLine1Config={{
             color: "#000000",
           }}
           showReferenceLine2
-          referenceLine2Position={minValue - (props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : 0)}
+          referenceLine2Position={minValue}
           //@ts-ignore
           referenceLine2Config={{
             color: "#0000ff",
           }}
           showReferenceLine3
-          referenceLine3Position={maxValue - (props.chartMin == undefined ? Math.max(0, minValue - (Math.pow(10, significantNumber) / 4)) : 0)}
+          referenceLine3Position={maxValue}
           //@ts-ignore
           referenceLine3Config={{
             color: "#ff0000",
