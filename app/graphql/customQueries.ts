@@ -1,4 +1,4 @@
-import { DownsampledAM319Message, DownsampledMSD18Message, GetDataArgs } from "./API";
+import { GetDataArgs } from "./API";
 import { getDownsampledAM319Data, getDownsampledMSD18Data } from "./queries";
 import { API } from '@aws-amplify/api'
 
