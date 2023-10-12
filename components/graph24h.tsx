@@ -149,7 +149,7 @@ function generateData(
         
         labelComponent: () =>
           ((i == 0 ||  i%Math.round((y.length-1)/4) == 0 || i == y.length-1) && time && time[i]) ? 
-            <Text style={{transform:[{translateY: -20}, {translateX: i == 0 ? (containerWidth ?? 0)/60 + (containerWidth ?? 0)/70 : i == y.length-1 ? (containerWidth ?? 0)/112 + (containerWidth ?? 0)/70 : (containerWidth ?? 0)/28 }, {scale: 4}],fontSize:2, color: "white", overflow: "visible"}}>{new Date(time[i] ?? 0).toLocaleTimeString([], {hour12:false, hour: "2-digit", minute: "2-digit"})}</Text> :
+            <Text style={{transform:[{translateY: -20}, {translateX: i == 0 ? (containerWidth ?? 0)/60 + (containerWidth ?? 0)/70 : i == y.length-1 ? (containerWidth ?? 0)/160 : (containerWidth ?? 0)/28 }, {scale: 4}],fontSize:2, color: "white", overflow: "visible"}}>{new Date(time[i] ?? 0).toLocaleTimeString([], {hour12:false, hour: "2-digit", minute: "2-digit"})}</Text> :
             undefined
       }}) : 
       [{value: 0}]
