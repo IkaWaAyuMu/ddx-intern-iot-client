@@ -45,7 +45,7 @@ export default function AM319Details() {
   const [isStartTimeShow, setIsStartTimeShow] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(
-    new Date(new Date(0).setSeconds(0, 0))
+    new Date(new Date(0).setHours(new Date().getHours(), new Date().getMinutes(), 0, 0))
   );
   const [isEndDateShow, setIsEndDateShow] = useState<boolean>(false);
   const [isEndTimeShow, setIsEndTimeShow] = useState<boolean>(false);
