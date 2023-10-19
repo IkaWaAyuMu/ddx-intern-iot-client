@@ -201,6 +201,11 @@ export default function Page() {
               ? data.tvoc!.findLast((e) => e != null) != null ? data.tvoc!.findLast((e) => e != null)! / 10e2: undefined ?? undefined
               : undefined
           }
+          hcho={
+            data && data.hcho != null
+              ? data.hcho!.findLast((e) => e != null) != null ? data.hcho!.findLast((e) => e != null)! / 10e2: undefined ?? undefined
+              : undefined
+          }
         />
         <View style={{ height: 8 }} />
         <Pressable
