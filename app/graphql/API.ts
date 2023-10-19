@@ -44,32 +44,6 @@ export type TimeRangeArgs = {
   endTime?: string | null,
 };
 
-export type AM319Message = {
-  __typename: "AM319Message",
-  statusCode: number,
-  result?:  Array<AM319Data | null > | null,
-  error?: string | null,
-};
-
-export type AM319Data = {
-  __typename: "AM319Data",
-  deveui: string,
-  brand: string,
-  model: string,
-  time: Array< number | null >,
-  timestamp: Array< string | null >,
-  pm2_5?: Array< number | null > | null,
-  humidity?: Array< number | null > | null,
-  co2?: Array< number | null > | null,
-  light_level?: Array< number | null > | null,
-  pir?: Array< number | null > | null,
-  tvoc?: Array< number | null > | null,
-  temperature?: Array< number | null > | null,
-  pressure?: Array< number | null > | null,
-  pm10?: Array< number | null > | null,
-  hcho?: Array< number | null > | null,
-};
-
 export type DownsampledAM319Message = {
   __typename: "DownsampledAM319Message",
   statusCode: number,
@@ -162,36 +136,6 @@ export type GetDevicesFromUIDsQuery = {
   } | null,
 };
 
-export type GetAM319DataQueryVariables = {
-  args?: GetDataArgs | null,
-};
-
-export type GetAM319DataQuery = {
-  getAM319Data?:  {
-    __typename: "AM319Message",
-    statusCode: number,
-    result?:  Array< {
-      __typename: "AM319Data",
-      deveui: string,
-      brand: string,
-      model: string,
-      time: Array< number | null >,
-      timestamp: Array< string | null >,
-      pm2_5?: Array< number | null > | null,
-      humidity?: Array< number | null > | null,
-      co2?: Array< number | null > | null,
-      light_level?: Array< number | null > | null,
-      pir?: Array< number | null > | null,
-      tvoc?: Array< number | null > | null,
-      temperature?: Array< number | null > | null,
-      pressure?: Array< number | null > | null,
-      pm10?: Array< number | null > | null,
-      hcho?: Array< number | null > | null,
-    } | null > | null,
-    error?: string | null,
-  } | null,
-};
-
 export type GetDownsampledAM319DataQueryVariables = {
   args?: GetDataArgs | null,
 };
@@ -222,14 +166,6 @@ export type GetDownsampledAM319DataQuery = {
     } | null > | null,
     error?: string | null,
   } | null,
-};
-
-export type TestQueryVariables = {
-  args?: GetDataArgs | null,
-};
-
-export type TestQuery = {
-  test?: string | null,
 };
 
 export type GetDownsampledMSD18DataQueryVariables = {
