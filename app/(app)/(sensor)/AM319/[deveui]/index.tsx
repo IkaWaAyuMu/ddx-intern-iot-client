@@ -198,12 +198,12 @@ export default function Page() {
           }
           tvoc={
             data && data.tvoc != null
-              ? data.tvoc!.findLast((e) => e != null) != null ? data.tvoc!.findLast((e) => e != null)! / 10e2: undefined ?? undefined
+              ? data.tvoc!.findLast((e) => e != null) != null ? data.tvoc!.findLast((e) => e != null)! / 10e1: undefined ?? undefined
               : undefined
           }
           hcho={
             data && data.hcho != null
-              ? data.hcho!.findLast((e) => e != null) != null ? data.hcho!.findLast((e) => e != null)! / 10e2: undefined ?? undefined
+              ? data.hcho!.findLast((e) => e != null) ?? undefined
               : undefined
           }
         />
@@ -613,7 +613,7 @@ function Gauge(props: {
 }
 
 function Data24h(props: { data24h: Partial<DownsampledAM319Data> | null }) {
-  const { time, temperature, humidity, pm2_5, pm10, co2, tvoc } =
+  const { time, temperature, humidity, pm2_5, pm10, co2, tvoc, hcho } =
     props.data24h ?? {};
   const timemillis = (time ?? []).map((e) => (e ? e * 1000 : null));
 
@@ -695,7 +695,15 @@ function Data24h(props: { data24h: Partial<DownsampledAM319Data> | null }) {
         <Text style={styles.itemHeaderText2}>{TVOCInfo.topic}</Text>
         <View style={styles.itemValueContainer}>
           {props.data24h && (
-            <Graph24h time={timemillis} y={[tvoc?.slice(-49).map(e => e != null ? e/10e2 : null)]} unit={IndoorBounds.tvoc.unit} startFromZero decimalPoints={1}/>
+            <Graph24h time={timemillis} y={[tvoc?.slice(-49).map(e => e != null ? e/10e1 : null)]} unit={AM319Bounds.tvoc.unit} decimalPoints={2}/>
+          )}
+        </View>
+      </View>
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemHeaderText2}>{HCHOInfo.topic}</Text>
+        <View style={styles.itemValueContainer}>
+          {props.data24h && (
+            <Graph24h time={timemillis} y={[hcho?.slice(-49)]} unit={IndoorBounds.hcho.unit} startFromZero decimalPoints={2}/>
           )}
         </View>
       </View>
@@ -704,7 +712,7 @@ function Data24h(props: { data24h: Partial<DownsampledAM319Data> | null }) {
 }
 
 function Data7d(props: { data7d: Partial<DownsampledAM319Data> | null }) {
-  const { time, temperature, humidity, pm2_5, pm10, co2, tvoc } =
+  const { time, temperature, humidity, pm2_5, pm10, co2, tvoc, hcho } =
     props.data7d ?? {};
   const timemillis = (time ?? []).map((e) => (e ? e * 1000 : null));
 
@@ -798,7 +806,7 @@ function Data7d(props: { data7d: Partial<DownsampledAM319Data> | null }) {
         <Text style={styles.itemHeaderText2}>{TVOCInfo.topic}</Text>
         <View style={styles.itemValueContainer}>
           {props.data7d && (
-            <Bubble7d time={timemillis} y={tvoc?.slice(-7).map(e => e != null ? e/10e2 : null)} />
+            <Bubble7d time={timemillis} y={tvoc?.slice(-7).map(e => e != null ? e/10e1 : null)} decimalPoints={2} />
           )}
           
         </View>
@@ -806,6 +814,20 @@ function Data7d(props: { data7d: Partial<DownsampledAM319Data> | null }) {
           style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
         >
           Unit: {AM319Bounds.tvoc.unitFull}
+        </Text>
+      </View>
+      <View style={styles.itemContainer}>
+        <Text style={styles.itemHeaderText2}>{CO2Info.topic}</Text>
+        <View style={styles.itemValueContainer}>
+          {props.data7d && (
+            <Bubble7d time={timemillis} y={hcho?.slice(-7)} decimalPoints={2} />
+          )}
+          
+        </View>
+        <Text
+          style={{ ...styles.itemValueDescriptionText, textAlign: "right" }}
+        >
+          Unit: {IndoorBounds.hcho.unitFull}
         </Text>
       </View>
     </View>
